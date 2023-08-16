@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+	crossorigin="anonymous">
+
+<style>
+/* Custom styles for the login page */
+body {
+	background-color: #fafafa; /* Off-white background color */
+	color: #333333; /* Dark gray text color */
+	font-family: "Roboto", sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	margin: 0;
+	padding: 0;
+}
+
+.login-page {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.form {
+	background: #ffffff; /* White background */
+	max-width: 360px;
+	padding: 45px;
+	text-align: center;
+	box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0
+		rgba(0, 0, 0, 0.24);
+	border-radius: 10px;
+}
+
+.form input {
+	font-family: "Roboto", sans-serif;
+	outline: 0;
+	background: #f2f2f2;
+	width: 100%;
+	border: 0;
+	margin: 0 0 15px;
+	padding: 15px;
+	box-sizing: border-box;
+	font-size: 14px;
+}
+
+.form button {
+	font-family: "Roboto", sans-serif;
+	text-transform: uppercase;
+	outline: 0;
+	background-color: #ff6b6b; /* Coral button background */
+	color: #ffffff; /* White button text color */
+	width: 100%;
+	border: 0;
+	padding: 15px;
+	font-size: 14px;
+	-webkit-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.form button:hover {
+	background-color: #ff4f4f; /* Darker coral background on hover */
+}
+
+.form .message {
+	margin: 15px 0 0;
+	color: #b3b3b3;
+	font-size: 12px;
+}
+
+.form .message a {
+	color: #007bff; /* Blue link color */
+	text-decoration: none;
+}
+
+.login-header {
+	margin-top: -31px;
+	margin-bottom: 26px;
+}
+</style>
+
+</head>
+<body>
+	<div class="login-page">
+		<div class="form">
+			<div class="login-header">
+				<h3 style="color: #ff6b6b;">LOGIN</h3>
+				<p>Please enter your credentials to login.</p>
+			</div>
+			<form class="login-form" action="login" method="post">
+				<input type="text" placeholder="email" name="email" /> <input
+					type=text placeholder="password" name="password" />
+				<button>login</button>
+				<p class="message">
+					Not registered? <a href="signup.html">Create an account</a>
+				</p>
+			</form>
+		</div>
+	</div>
+</body>
+</html>

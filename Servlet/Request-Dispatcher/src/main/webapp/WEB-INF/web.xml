@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app>
+	
+	<servlet>
+		<servlet-name>Add</servlet-name>
+		<servlet-class>com.Servlet1.Addition</servlet-class>
+	</servlet>
+
+	
+	<servlet-mapping>
+		<servlet-name>Add</servlet-name>
+		<url-pattern>/add</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>Multiply</servlet-name>
+		<servlet-class>com.Servlet2.Multiplication</servlet-class>
+	</servlet>
+
+	
+	<servlet-mapping>
+		<servlet-name>Multiply</servlet-name>
+		<url-pattern>/multiply</url-pattern>
+	</servlet-mapping>
+	
+</web-app>
