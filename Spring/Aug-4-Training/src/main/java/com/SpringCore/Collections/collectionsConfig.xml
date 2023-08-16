@@ -1,0 +1,43 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+
+	<bean class="com.SpringCore.Collections.Employee" name="Employee">
+		<property name="name" value="Sandeep balli" />
+		<property name="phones">
+			<list>
+				<value>7896554321</value>
+				<value>7896556321</value>
+				<value>7896554321</value>
+			</list>
+		</property>
+
+		<property name="addresses">
+			<set>
+				<value>Bbsr</value>
+				<value>Rgda</value>
+
+			</set>
+		</property>
+
+		<property name="courses">
+			<map>
+				<entry key="Java" value="6 Months" />
+				<entry key="Spring" value="3 Months" />
+				<entry key="Spring Boot" value="3 Months" />
+			</map>
+		</property>
+
+	</bean>
+
+
+
+</beans>
