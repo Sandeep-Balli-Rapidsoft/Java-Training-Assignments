@@ -1,0 +1,12 @@
+Questions
+----------------------------------
+
+1. Given a set of integers, write a Java method to find the maximum and minimum values in the set.
+
+2. Write a Java method that takes two sets, set1 and set2, as parameters and returns a new set that contains the elements present in set1 but not in set2.
+
+3. Write a Java method that takes a set of strings and returns a new set containing the unique characters present in all the strings of the input set.
+
+4. Write a Java method to check if two sets, set1 and set2, are disjoint. (Two sets are disjoint if they have no elements in common.)
+
+5. Given two sets of integers, write a Java method to find the intersection of the two sets (i.e., the elements present in both sets).

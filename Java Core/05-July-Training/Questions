@@ -1,0 +1,26 @@
+Questions
+--------------------------
+
+Question: Implement a program to reverse the order of elements in a queue.
+Input: A queue of integers.
+Output: The same queue with elements reversed.
+
+Question: Write a Java program to simulate a printing queue. Implement a function that takes a queue of print jobs as input and prints them in the order they were added to the queue.
+Input: A queue of print jobs, where each job is represented by a string.
+Output: The print jobs printed in the order they were added.
+
+Question: Implement a program to find the largest element in a queue of integers without removing any elements from the queue.
+Input: A queue of integers.
+Output: The largest element in the queue.
+
+Question: Write a Java program to simulate a call center. Implement a function that takes a queue of customer calls and processes them in a fair manner, where each customer is served in a round-robin fashion.
+Input: A queue of customer calls, where each call is represented by a string.
+Output: The processed customer calls in the order they were received.
+
+Question: Implement a program to sort a queue of integers in ascending order without using any additional data structures.
+Input: A queue of integers.
+Output: The same queue with integers sorted in ascending order.
+
+Question: Write a Java program to implement a maze solver using a queue-based breadth-first search algorithm.
+Input: A maze represented as a 2D array, where 0 represents a valid path and 1 represents a wall.
+Output: The shortest path from the start position to the goal position in the maze.

@@ -1,0 +1,6 @@
+1) all the checked and unchecked exceptions use with attach screenshots for each.
+2) handle all the exception using try catch and throws.
+3) create  nested try and catch block.
+4) in a try block declare two catch block and show the use case for parent and child class exception.
+5) use final block
+6) crate a project where you can input the balance in run time and use a static variable where you can store the balance as 5000. if the user is input the value exceed than 5000 then create your own exception class as BalanceExceedException and print the message in console as you're able to withdraw upto 5000.

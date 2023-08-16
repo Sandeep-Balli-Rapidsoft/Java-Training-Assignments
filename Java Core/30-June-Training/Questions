@@ -1,0 +1,24 @@
+Questions
+----------------------------------------
+
+1. Given a list of names, count the number of occurrences of each name and display the result.
+
+2. Given a list of integers, find the second smallest element using a collection.
+
+3. Given two lists of integers, find the common elements between them and display the result.
+
+4. Given a list of strings, remove all elements that start with a vowel and display the modified list.
+
+5. Given a list of integers, find the average of all even numbers using a collection.
+
+6. Given a list of words, arrange them in ascending order of their lengths using a collection.
+
+7. Given a list of integers, remove all prime numbers from the list and display the modified list.
+
+8. Given a list of strings, find the longest word using a collection.
+
+9. Given a list of integers, remove all duplicate elements and display the modified list.
+
+10 Given two lists of integers, merge them into a single list in sorted order using a collection.
+
+

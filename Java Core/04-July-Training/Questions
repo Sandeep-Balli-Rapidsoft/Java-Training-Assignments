@@ -1,0 +1,22 @@
+QUESTIONS :-
+--------------------------------------------
+
+1. Write a Java method that takes a map of student names and their corresponding grades as parameters and returns the name of the student with the highest grade.
+
+2. Given a map of product names and their corresponding prices, write a Java method to calculate the total cost of all the products in the map, print the output as like invoice.
+
+3. Write a Java method that takes a list of words calculates their frequencies and stores them into a map frequence as key and words as value and sorts the map by descending order.
+
+4. Given a map of employee names and their corresponding salaries, write a Java method to find the employee with the highest salary.
+
+5. Write a Java method that takes a map of student names and their corresponding marks in different subjects as parameters and returns the average marks for each student.
+
+6. Given a map of characters and their corresponding frequencies in a string, write a Java method to find the character(s) that occur(s) the most number of times.
+
+7. Write a Java method that takes a map of city names and their corresponding populations as parameters and returns the name of the city with the highest population.
+
+8. Given a map of words and their meanings, write a Java method to find all the words that have a meaning starting with a specified prefix.
+
+9. Write a Java method that takes a map of student names and their corresponding grades in different subjects as parameters and returns a new map with the average grade for each student.
+
+10. Given a map of employee names and their corresponding departments, write a Java method to find the number of employees in each department.

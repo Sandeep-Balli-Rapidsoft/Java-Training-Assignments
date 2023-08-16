@@ -1,0 +1,15 @@
+1.Write a program that creates an array of wrapper class objects (Integer, Double, etc.), assigns values to them, and calculates the sum of the array elements.
+
+2.Write a program that demonstrates the usage of wrapper classes by converting an integer to a string and a string to an integer.
+
+3.Write a program program that demonstrates autoboxing and auto-unboxing .
+.
+4.Write a program using index of a character, performs concatenation, replacement, and more. It also demonstrates methods specific to StringBuilder and StringBuffer such as appending, inserting, deleting, and reversing.
+
+5.Write a program that creates an object of a Person class represents a person with a name and age. and overrides the toString() ,equals(),hashCode().
+
+6.Write a program ,here we define an enum called AgeCategory which represents the eligibility for voting. It has two enum values: ELIGIBLE and INELIGIBLE, each with a corresponding message.The checkVotingEligibility() method takes an age as input and returns the appropriate AgeCategory based on the age.
+
+create a  method, we set an age value (in this case, 20) and call the checkVotingEligibility() method to determine the eligibility. Finally, we print the age and the eligibility message based on the results.
+
+7.Write a program to showcase the usage of functions such as Math.abs(), Math.sqrt(), Math.pow(), Math.max(), Math.min(), Math.random(), Math.floor(), Math.ceil(), and Math.round(). 

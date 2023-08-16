@@ -1,0 +1,10 @@
+1) Create a functional interface called MathOperation with a method calculate(int a, int b) that returns an integer. Write a lambda expression that implements the MathOperation interface to calculate the product of two numbers.
+
+2)Given a list of strings, use lambda expressions to concatenate all the strings and return the final result.(provide the string value in run time using scanner class)
+
+3)Create a functional interface called Converter with a method convert(String str) that returns an integer. Write a lambda expression that implements the Converter interface to parse a string and return its length as an integer.
+
+4)  Write a program that uses lambda expressions to calculate the square root of each number in a list of doubles. The program should take a list of doubles as input, use a lambda expression to calculate the square root of each number, and display the results as the output.
+
+5)Create a StringValidator class with an instance method isPalindrome() that checks if a given string is a palindrome. .
+ Use a method reference  to refer to the instance method. Check if each word in the array is a palindrome.
