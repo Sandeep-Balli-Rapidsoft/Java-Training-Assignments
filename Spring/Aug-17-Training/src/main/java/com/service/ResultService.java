@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import com.dao.ResultDao;
 import com.dao.StudentDao;
+import com.dao.SubjectDao;
 import com.entities.Result;
 import com.entities.Student;
 import com.entities.Subject;
@@ -19,6 +20,7 @@ public class ResultService {
 	ApplicationContext context = new AnnotationConfigApplicationContext(DbConfig.class);
 	ResultDao resultDao = context.getBean(ResultDao.class);
 	StudentDao studentDao = context.getBean(StudentDao.class);
+	SubjectDao subjectDao = context.getBean(SubjectDao.class);
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -33,6 +35,7 @@ public class ResultService {
 			Integer studentId = student.getId();
 
 			List<Result> resultList = resultDao.resultList();
+			List<Subject> subjectList = subjectDao.subjectList();
 
 			for (Result result : resultList) {
 				if (result.getStudent().getId() == studentId) {
@@ -41,14 +44,14 @@ public class ResultService {
 				}
 			}
 
-			for (int i = 0; i < 6; i++) {
-				System.out.println("Enter Subject Id: ");
-				Integer subjectId = Integer.parseInt(br.readLine());
-
+			for (Subject subject : subjectList) {
+				
+				System.out.println("Enter Marks For " + subject.getSubject_name());
+				
 				System.out.println("Enter Mark: ");
 				Double mark = Double.parseDouble(br.readLine());
 
-				int r = resultDao.insert(new Result(new Student(studentId), new Subject(subjectId), mark));
+				int r = resultDao.insert(new Result(new Student(studentId), new Subject(subject.getId()), mark));
 			}
 
 		} else {
