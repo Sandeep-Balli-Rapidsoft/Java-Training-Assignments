@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.entities.Result;
 import com.entities.Student;
+import com.entities.Subject;
 
 @Transactional
 @Component("resultDao")
@@ -30,45 +31,45 @@ public class ResultDao {
 		return list;
 	}
 
-	public Map<Student, Double> calculateMarksByEmail(String student_email) {
+	public Map<Student, Map<String, Double>> calculateMarksByEmail(String student_email) {
 		String query = "FROM Student WHERE student_email = :student_email";
 		List<Student> students = (List<Student>) this.hibernateTemplate.findByNamedParam(query, "student_email",
 				student_email);
-		Map<Student, Double> studentMap = new HashMap<>();
+		Map<Student, Map<String, Double>> studentMap = new HashMap<>();
 
 		if (!students.isEmpty()) {
 			Student student = students.get(0);
 
-			Double marks = 0.0;
+			Map<String, Double> subjectMarksMap = new HashMap<>();
 			List<Result> fullList = resultList();
 
 			for (Result result : fullList) {
 				if (result.getStudent().getStudent_email().equals(student_email)) {
-					marks += result.getMark();
+					subjectMarksMap.put(result.getSubject().getSubject_name(), result.getMark());
 				}
 			}
 
-			studentMap.put(student, marks);
-		} else {
-			System.out.println("Email not found");
+			studentMap.put(student, subjectMarksMap);
 		}
 		return studentMap;
 	}
 
-	public Map<Student, Double> displayStudentResult() {
-		Map<Student, Double> studentMap = new HashMap<>();
+	public Map<Student, Map<String, Double>> displayAllStudentResult() {
+		Map<Student, Map<String, Double>> studentMap = new HashMap<>();
 		List<Result> fullResultList = resultList();
 
 		for (Result result : fullResultList) {
 			Student student = result.getStudent();
-			Double marksScored = result.getMark();
-			if (studentMap.containsKey(student)) {
-				Double existingMarks = studentMap.get(student);
-				studentMap.put(student, existingMarks + marksScored);
-			} else {
-				studentMap.put(student, marksScored);
-			}
+			Subject subject = result.getSubject();
+			Double mark = result.getMark();
+
+			studentMap.putIfAbsent(student, new HashMap<>());
+
+			Map<String, Double> resultMap = studentMap.get(student);
+
+			resultMap.put(subject.getSubject_name(), mark);
 		}
+
 		return studentMap;
 	}
 
