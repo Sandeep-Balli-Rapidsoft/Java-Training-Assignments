@@ -8,9 +8,7 @@ import java.util.List;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.dao.ResultDao;
 import com.dao.StudentDao;
-import com.dao.SubjectDao;
 import com.entities.Student;
 import com.main.DbConfig;
 
