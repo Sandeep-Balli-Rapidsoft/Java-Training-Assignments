@@ -23,7 +23,6 @@ public class ResultService {
 	ApplicationContext context = new AnnotationConfigApplicationContext(DbConfig.class);
 	ResultDao resultDao = context.getBean(ResultDao.class);
 	StudentDao studentDao = context.getBean(StudentDao.class);
-	SubjectDao subjectDao = context.getBean(SubjectDao.class);
 
 	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -31,14 +30,19 @@ public class ResultService {
 		System.out.println("Enter Student Email: ");
 		String email = br.readLine();
 
-		// Fetching the student object by email.
 		Student student = studentDao.getStudentByEmail(email);
 
 		if (student != null) {
 			Integer studentId = student.getId();
 
 			List<Result> resultList = resultDao.resultList();
-			List<Subject> subjectList = subjectDao.subjectList();
+			List<Subject> subjectList = new ArrayList<>();
+			
+			for(Result result : resultList) {
+				if(!subjectList.contains(result.getSubject())) {
+					subjectList.add(result.getSubject());
+				}
+			}
 
 			for (Result result : resultList) {
 				if (result.getStudent().getId() == studentId) {
@@ -122,31 +126,49 @@ public class ResultService {
 	}
 
 	public void applyForRecheck(String email) throws NumberFormatException, IOException {
-		Map<Student, Map<Subject, Double>> resultMap = resultDao.calculateMarksByEmail(email);
 
-		resultMap.entrySet().forEach(entry -> {
-			Student studentKey = entry.getKey();
-			System.out.println("Hello, " + studentKey.getStudent_name());
-			System.out.println("Choose the subject to apply for recheck below.");
-			Map<Subject, Double> marksMap = entry.getValue();
-			for (Map.Entry<Subject, Double> entryForMark : marksMap.entrySet()) {
-				Subject subject = entryForMark.getKey();
-				Double mark = entryForMark.getValue();
-				System.out.println("Enter " + subject.getId() + ", to apply for recheck,  Subject: "
-						+ subject.getSubject_name() + " Mark: " + mark);
+		List<Result> resultList = resultDao.resultList();
+		List<Result> studentResultList = new ArrayList<>();
+
+		for (Result result : resultList) {
+			if (result.getStudent().getStudent_email().equals(email)) {
+				studentResultList.add(result);
+			}
+		}
+
+		if (studentResultList.isEmpty()) {
+			System.out.println("No results found for the specified student.");
+			return;
+		}
+
+		Integer idx = 1;
+		for (Result result : studentResultList) {
+			Subject subject = result.getSubject();
+			System.out.println("Enter " + idx + " , to apply rechecking for " + subject.getSubject_name());
+			idx++;
+		}
+		try {
+			Integer optionEnteredForSubject = Integer.parseInt(br.readLine());
+			if (optionEnteredForSubject < 1 || optionEnteredForSubject > studentResultList.size()) {
+				System.out.println("Invalid option selected.");
+				return;
 			}
 
-			try {
-				Integer subjectId = Integer.parseInt(br.readLine());
-				Result result = resultDao.getResultByStudentEmailAndSubjectId(email, subjectId);
-				result.setIsRecheck(true);
-				resultDao.applyRecheck(result);
-			} catch (IOException e) {
-				System.err.println("An error occurred while reading input: " + e.getMessage());
-			} catch (NumberFormatException e) {
-				System.err.println("Invalid input. Please enter a valid number.");
-			}
-		});
+			Result selectedResult = studentResultList.get(optionEnteredForSubject - 1);
+
+			Student student = selectedResult.getStudent();
+			Subject subject = selectedResult.getSubject();
+			Double exisitingMark = selectedResult.getMark();
+			Result recheckResult = new Result(selectedResult.getId(), student, subject, exisitingMark, true);
+
+			resultDao.applyRecheck(recheckResult);
+			System.out.println("Recheck applied successfully.");
+
+		} catch (IOException e) {
+			System.err.println("An error occurred while reading input: " + e.getMessage());
+		} catch (NumberFormatException e) {
+			System.err.println("Invalid input. Please enter a valid number.");
+		}
 	}
 
 	public void studentsAppliedForRecheck() throws IOException {
@@ -164,25 +186,41 @@ public class ResultService {
 
 	}
 
-	public void updateMarkForStudent(String email) throws NumberFormatException, IOException {
-		List<Result> resultList = resultDao.getStudentMarksByEmail(email);
-		List<Result> subjectMarksToBeUpdatedList = new ArrayList<>();
-		for (Result result : resultList) {
-			if (result.getIsRecheck()) {
-				subjectMarksToBeUpdatedList.add(result);
+	public void updateMarkForStudent(String email) {
+		try {
+			List<Result> resultList = resultDao.resultList();
+			List<Result> subjectMarksToBeUpdatedList = new ArrayList<>();
+
+			for (Result result : resultList) {
+				if (result.getStudent().getStudent_email().equals(email) && result.getIsRecheck()) {
+					subjectMarksToBeUpdatedList.add(result);
+				}
 			}
-		}
 
-		for (Result result : subjectMarksToBeUpdatedList) {
-			System.out.println("Enter Marks for " + result.getSubject().getSubject_name());
-			Double mark = Double.parseDouble(br.readLine());
-			Result updatedResult = resultDao.getResultByStudentEmailAndSubjectId(result.getStudent().getStudent_email(),
-					result.getSubject().getId());
-			updatedResult.setMark(mark);
-			updatedResult.setIsRecheck(false);
-			resultDao.updateMark(updatedResult);
-		}
+			if (subjectMarksToBeUpdatedList.isEmpty()) {
+				System.out.println("No results found for the specified student.");
+				return;
+			}
 
+			for (Result result : subjectMarksToBeUpdatedList) {
+				System.out.println("Enter Marks for " + result.getSubject().getSubject_name());
+
+				try {
+					Double mark = Double.parseDouble(br.readLine());
+					Result updatedResult = result;
+					updatedResult.setMark(mark);
+					updatedResult.setIsRecheck(false);
+
+					resultDao.updateMark(updatedResult);
+				} catch (NumberFormatException e) {
+					System.err.println("Invalid input for mark. Please enter a valid number.");
+				} catch (IOException e) {
+					System.err.println("An error occurred while reading input: " + e.getMessage());
+				}
+			}
+		} catch (Exception e) {
+			System.err.println("An error occurred: " + e.getMessage());
+		}
 	}
 
 	public Double calculatePercentage(Double marksSecured) {

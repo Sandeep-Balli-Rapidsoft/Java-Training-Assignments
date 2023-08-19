@@ -91,6 +91,14 @@ public class Result {
 		this.subject = subject;
 		this.is_recheck = is_recheck;
 	}
-	
-	
+
+	public Result(Integer id, Student student, Subject subject, Double mark, Boolean is_recheck) {
+		super();
+		this.id = id;
+		this.student = student;
+		this.subject = subject;
+		this.mark = mark;
+		this.is_recheck = is_recheck;
+	}
+
 }
