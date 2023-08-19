@@ -3,6 +3,7 @@ package com.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +65,11 @@ public class ResultService {
 	}
 
 	public void getResultByEmail(String email) {
-		Map<Student, Map<String, Double>> studentMap = resultDao.calculateMarksByEmail(email);
+		Map<Student, Map<Subject, Double>> studentMap = resultDao.calculateMarksByEmail(email);
 
-		for (Map.Entry<Student, Map<String, Double>> studentEntry : studentMap.entrySet()) {
+		for (Map.Entry<Student, Map<Subject, Double>> studentEntry : studentMap.entrySet()) {
 			Student student = studentEntry.getKey();
-			Map<String, Double> subjectMarksMap = studentEntry.getValue();
+			Map<Subject, Double> subjectMarksMap = studentEntry.getValue();
 			Double totalMarks = 0.0;
 
 			for (Double mark : subjectMarksMap.values()) {
@@ -85,10 +86,10 @@ public class ResultService {
 			System.out.println("Grade: " + grade);
 			System.out.println("Subject-wise Marks:");
 
-			for (Map.Entry<String, Double> subjectEntry : subjectMarksMap.entrySet()) {
-				String subject = subjectEntry.getKey();
+			for (Map.Entry<Subject, Double> subjectEntry : subjectMarksMap.entrySet()) {
+				Subject subject = subjectEntry.getKey();
 				Double mark = subjectEntry.getValue();
-				System.out.println("Subject: " + subject + ", Mark: " + mark);
+				System.out.println("Subject: " + subject.getSubject_name() + ", Mark: " + mark);
 			}
 
 			System.out.println("---------------------------------------------");
@@ -97,16 +98,16 @@ public class ResultService {
 	}
 
 	public void getAllStudentData() {
-		Map<Student, Map<String, Double>> map = resultDao.displayAllStudentResult();
+		Map<Student, Map<Subject, Double>> map = resultDao.displayAllStudentResult();
 
-		for (Map.Entry<Student, Map<String, Double>> entry : map.entrySet()) {
+		for (Map.Entry<Student, Map<Subject, Double>> entry : map.entrySet()) {
 			Student student = entry.getKey();
-			Map<String, Double> resultMap = entry.getValue();
+			Map<Subject, Double> resultMap = entry.getValue();
 
 			System.out.println("Student: " + student.getStudent_name());
 			double totalMarks = 0.0;
-			for (Map.Entry<String, Double> resultEntry : resultMap.entrySet()) {
-				String subject = resultEntry.getKey();
+			for (Map.Entry<Subject, Double> resultEntry : resultMap.entrySet()) {
+				String subject = resultEntry.getKey().getSubject_name();
 				Double mark = resultEntry.getValue();
 				System.out.println("Subject: " + subject + ", Mark: " + mark);
 				totalMarks += mark;
@@ -120,20 +121,68 @@ public class ResultService {
 		}
 	}
 
-	public void applyForRecheck(String email) throws IOException {
-	    Student student = resultDao.getStudentByEmail(email);
+	public void applyForRecheck(String email) throws NumberFormatException, IOException {
+		Map<Student, Map<Subject, Double>> resultMap = resultDao.calculateMarksByEmail(email);
 
-	    System.out.println("Enter the subject id: ");
-	    Integer subjectId = Integer.parseInt(br.readLine());
+		resultMap.entrySet().forEach(entry -> {
+			Student studentKey = entry.getKey();
+			System.out.println("Hello, " + studentKey.getStudent_name());
+			System.out.println("Choose the subject to apply for recheck below.");
+			Map<Subject, Double> marksMap = entry.getValue();
+			for (Map.Entry<Subject, Double> entryForMark : marksMap.entrySet()) {
+				Subject subject = entryForMark.getKey();
+				Double mark = entryForMark.getValue();
+				System.out.println("Enter " + subject.getId() + ", to apply for recheck,  Subject: "
+						+ subject.getSubject_name() + " Mark: " + mark);
+			}
 
-	    Subject subject = resultDao.getSubjectById(subjectId);
+			try {
+				Integer subjectId = Integer.parseInt(br.readLine());
+				Result result = resultDao.getResultByStudentEmailAndSubjectId(email, subjectId);
+				result.setIsRecheck(true);
+				resultDao.applyRecheck(result);
+			} catch (IOException e) {
+				System.err.println("An error occurred while reading input: " + e.getMessage());
+			} catch (NumberFormatException e) {
+				System.err.println("Invalid input. Please enter a valid number.");
+			}
+		});
+	}
 
-	    Result recheckResult = new Result();
-	    recheckResult.setId(subjectId);
-	    recheckResult.setStudent(student); 
-	    recheckResult.setSubject(subject);
+	public void studentsAppliedForRecheck() throws IOException {
+		List<Result> resultList = resultDao.resultList();
+		for (Result result : resultList) {
+			if (result.getIsRecheck()) {
+				System.out.println("Student ID: " + result.getStudent().getStudent_email());
+				System.out.println("Student Name: " + result.getStudent().getStudent_name());
+				System.out.println("Subject: " + result.getSubject().getSubject_name());
+				System.out.println("Mark " + result.getMark());
 
-	    resultDao.applyRecheck(recheckResult);
+				System.out.println("-----------------------");
+			}
+		}
+
+	}
+
+	public void updateMarkForStudent(String email) throws NumberFormatException, IOException {
+		List<Result> resultList = resultDao.getStudentMarksByEmail(email);
+		List<Result> subjectMarksToBeUpdatedList = new ArrayList<>();
+		for (Result result : resultList) {
+			if (result.getIsRecheck()) {
+				subjectMarksToBeUpdatedList.add(result);
+			}
+		}
+
+		for (Result result : subjectMarksToBeUpdatedList) {
+			System.out.println("Enter Marks for " + result.getSubject().getSubject_name());
+			Double mark = Double.parseDouble(br.readLine());
+			Result updatedResult = resultDao.getResultByStudentEmailAndSubjectId(result.getStudent().getStudent_email(),
+					result.getSubject().getId());
+			updatedResult.setMark(mark);
+			updatedResult.setIsRecheck(false);
+			resultDao.updateMark(updatedResult);
+		}
+
 	}
 
 	public Double calculatePercentage(Double marksSecured) {

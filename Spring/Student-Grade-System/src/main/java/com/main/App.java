@@ -21,6 +21,8 @@ public class App {
 			System.out.println("Enter 4, to Display Student Data By Email");
 			System.out.println("Enter 5, to Display All Students Data");
 			System.out.println("Enter 6, To Apply for Recheck");
+			System.out.println("Enter 7, To View Students Who Applied For Recheck");
+			System.out.println("Enter 8, To Update Mark");
 
 			Integer optionEntered = Integer.parseInt(br.readLine());
 
@@ -52,9 +54,15 @@ public class App {
 				String student_email = br.readLine();
 				ResultService rs = new ResultService();
 				rs.applyForRecheck(student_email);
-			}
-
-			else {
+			} else if (optionEntered == 7) {
+				ResultService rs = new ResultService();
+				rs.studentsAppliedForRecheck();
+			} else if (optionEntered == 8) {
+				System.out.println("Enter Student Email");
+				String student_email = br.readLine();
+				ResultService rs = new ResultService();
+				rs.updateMarkForStudent(student_email);
+			} else {
 				System.out.println("Exiting...");
 				System.exit(0);
 			}
