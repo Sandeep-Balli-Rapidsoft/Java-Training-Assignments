@@ -6,66 +6,69 @@ import java.io.InputStreamReader;
 
 import com.service.ResultService;
 import com.service.StudentService;
-import com.service.SubjectService;
 
 public class App {
-	public static void main(String[] args) throws IOException {
-		System.out.println("Hello World!");
+    public static void main(String[] args) throws IOException {
+        System.out.println("Hello World!");
 
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        ResultService rs = new ResultService();
 
-		while (true) {
-			System.out.println("Enter 1, to Add New Student Data");
-			System.out.println("Enter 2, to Add Subject");
-			System.out.println("Enter 3, to Add Result");
-			System.out.println("Enter 4, to Display Student Data By Email");
-			System.out.println("Enter 5, to Display All Students Data");
-			System.out.println("Enter 6, To Apply for Recheck");
-			System.out.println("Enter 7, To View Students Who Applied For Recheck");
-			System.out.println("Enter 8, To Update Mark");
+        while (true) {
+            System.out.println("Enter 1, to Add New Student Data");
+            System.out.println("Enter 2, to Add Result");
+            System.out.println("Enter 3, to Display Student Data By Email");
+            System.out.println("Enter 4, to Display All Students Data");
+            System.out.println("Enter 5, To Apply for Recheck");
+            System.out.println("Enter 6, To View Students Who Applied For Recheck");
+            System.out.println("Enter 7, To Update Mark");
+            System.out.println("Enter 8, To Exit");
 
-			Integer optionEntered = Integer.parseInt(br.readLine());
+            try {
+                int optionEntered = Integer.parseInt(br.readLine());
 
-			if (optionEntered == 1) {
-				StudentService ss = new StudentService();
-				ss.insertNewStudent();
-				System.out.println("Student Added Successfully.");
-			} else if (optionEntered == 2) {
-				SubjectService ss = new SubjectService();
-				ss.addNewSubject();
-				System.out.println("Subject Added Successfully.");
-			} else if (optionEntered == 3) {
-				ResultService rs = new ResultService();
-				rs.insertNewResult();
-				System.out.println("Student Result Added Successfully.");
-
-			} else if (optionEntered == 4) {
-				System.out.println("Enter Student Email");
-				String student_email = br.readLine();
-				ResultService rs = new ResultService();
-				rs.getResultByEmail(student_email);
-
-			} else if (optionEntered == 5) {
-				ResultService rs = new ResultService();
-				rs.getAllStudentData();
-
-			} else if (optionEntered == 6) {
-				System.out.println("Enter Student Email");
-				String student_email = br.readLine();
-				ResultService rs = new ResultService();
-				rs.applyForRecheck(student_email);
-			} else if (optionEntered == 7) {
-				ResultService rs = new ResultService();
-				rs.studentsAppliedForRecheck();
-			} else if (optionEntered == 8) {
-				System.out.println("Enter Student Email");
-				String student_email = br.readLine();
-				ResultService rs = new ResultService();
-				rs.updateMarkForStudent(student_email);
-			} else {
-				System.out.println("Exiting...");
-				System.exit(0);
-			}
-		}
-	}
+                switch (optionEntered) {
+                    case 1:
+                        StudentService ss = new StudentService();
+                        ss.insertNewStudent();
+                        
+                        break;
+                    case 2:
+                        rs.insertNewResult();
+                      
+                        break;
+                    case 3:
+                        System.out.println("Enter Student Email");
+                        String studentEmail = br.readLine();
+                        rs.getResultByEmail(studentEmail);
+                        break;
+                    case 4:
+                        rs.getAllStudentData();
+                        break;
+                    case 5:
+                        System.out.println("Enter Student Email");
+                        String studentEmailForRecheck = br.readLine();
+                        rs.applyForRecheck(studentEmailForRecheck);
+                        break;
+                    case 6:
+                        rs.studentsAppliedForRecheck();
+                        break;
+                    case 7:
+                        System.out.println("Enter Student Email");
+                        String studentEmailForUpdate = br.readLine();
+                        rs.updateMarkForStudent(studentEmailForUpdate);
+                        break;
+                    case 8:
+                        System.out.println("Exiting...");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid option. Please try again.");
+                        break;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+            }
+        }
+    }
 }

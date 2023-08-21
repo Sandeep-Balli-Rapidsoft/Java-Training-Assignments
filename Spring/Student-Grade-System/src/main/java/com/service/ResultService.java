@@ -37,9 +37,9 @@ public class ResultService {
 
 			List<Result> resultList = resultDao.resultList();
 			List<Subject> subjectList = new ArrayList<>();
-			
-			for(Result result : resultList) {
-				if(!subjectList.contains(result.getSubject())) {
+
+			for (Result result : resultList) {
+				if (!subjectList.contains(result.getSubject())) {
 					subjectList.add(result.getSubject());
 				}
 			}
@@ -59,6 +59,7 @@ public class ResultService {
 				Double mark = Double.parseDouble(br.readLine());
 
 				int r = resultDao.insert(new Result(new Student(studentId), new Subject(subject.getId()), mark, false));
+				System.out.println("Student Result Added Successfully.");
 			}
 
 		} else {
@@ -140,8 +141,9 @@ public class ResultService {
 			System.out.println("No results found for the specified student.");
 			return;
 		}
-
+		
 		Integer idx = 1;
+		System.out.println("Please enter your choice,");
 		for (Result result : studentResultList) {
 			Subject subject = result.getSubject();
 			System.out.println("Enter " + idx + " , to apply rechecking for " + subject.getSubject_name());
@@ -173,9 +175,19 @@ public class ResultService {
 
 	public void studentsAppliedForRecheck() throws IOException {
 		List<Result> resultList = resultDao.resultList();
+		List<Result> appliedForRecheckList = new ArrayList<>();
 		for (Result result : resultList) {
 			if (result.getIsRecheck()) {
-				System.out.println("Student ID: " + result.getStudent().getStudent_email());
+				appliedForRecheckList.add(result);
+			}
+		}
+		if (appliedForRecheckList.isEmpty() || appliedForRecheckList == null) {
+			System.out.println("No student have applied for recheck");
+			return;
+		}
+		for (Result result : appliedForRecheckList) {
+			if (result.getIsRecheck()) {
+				System.out.println("Student Email: " + result.getStudent().getStudent_email());
 				System.out.println("Student Name: " + result.getStudent().getStudent_name());
 				System.out.println("Subject: " + result.getSubject().getSubject_name());
 				System.out.println("Mark " + result.getMark());
@@ -198,7 +210,7 @@ public class ResultService {
 			}
 
 			if (subjectMarksToBeUpdatedList.isEmpty()) {
-				System.out.println("No results found for the specified student.");
+				System.out.println("This student has not applied for recheck.");
 				return;
 			}
 

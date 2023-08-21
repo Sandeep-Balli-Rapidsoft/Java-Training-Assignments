@@ -34,6 +34,7 @@ public class StudentService {
 		}
 
 		int result = studentDao.insert(new Student(name, email));
+		System.out.println("Student Added Successfully.");
 		return result;
 	}
 
