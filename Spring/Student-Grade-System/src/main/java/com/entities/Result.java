@@ -30,7 +30,7 @@ public class Result {
 	private Double mark;
 	
 	@Column(name = "is_recheck")
-	private Boolean is_recheck = false;
+	private Boolean is_recheck;
 
 	public Integer getId() {
 		return id;

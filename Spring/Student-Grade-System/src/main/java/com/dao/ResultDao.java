@@ -55,7 +55,6 @@ public class ResultDao {
 		return studentMap;
 	}
 
-
 	public Map<Student, Map<Subject, Double>> displayAllStudentResult() {
 		Map<Student, Map<Subject, Double>> studentMap = new HashMap();
 		List<Result> fullResultList = resultList();
@@ -74,12 +73,12 @@ public class ResultDao {
 
 		return studentMap;
 	}
-	
+
 	public void applyRecheck(Result result) {
 		result.setIsRecheck(true);
 		this.hibernateTemplate.update(result);
 	}
-	
+
 	public void updateMark(Result result) {
 		result.setIsRecheck(false);
 		this.hibernateTemplate.update(result);
