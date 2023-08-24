@@ -1,6 +1,7 @@
 package com.springmvc.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -84,36 +85,65 @@ public class ResultController {
 		return "verify-email-result";
 	}
 
+//	@RequestMapping("/verify-for-result")
+//	public ModelAndView getResultByEmail(@RequestParam("email") String email) {
+//		Student student = studentDao.getStudentByEmail(email);
+//		ModelAndView modelAndView = new ModelAndView();
+//
+//		if (student == null) {
+//			modelAndView.setViewName("error");
+//			return modelAndView;
+//		}
+//
+//		System.out.println(student.getStudent_name());
+//
+//		Map<Student, Map<Subject, Double>> resultMap = resultService.getResultThroughMap(email);
+//		System.out.println(resultMap);
+//
+//		Double totalMarks = 0.0;
+//		for (Entry<Student, Map<Subject, Double>> entry : resultMap.entrySet()) {
+//			modelAndView.addObject("student", entry.getKey());
+//			modelAndView.addObject("marksMap", entry.getValue());
+//			for (Entry<Subject, Double> markEntry : entry.getValue().entrySet()) {
+//				totalMarks += markEntry.getValue();
+//			}
+//		}
+//
+//		Double percentage = resultService.calculatePercentage(totalMarks);
+//		String grade = resultService.calculateGrade(percentage);
+//		modelAndView.addObject("percentage", percentage);
+//		modelAndView.addObject("grade", grade);
+//		modelAndView.setViewName("student-data");
+//
+//		return modelAndView;
+//	}
+	
 	@RequestMapping("/verify-for-result")
-	public ModelAndView getResultByEmail(@RequestParam("email") String email) {
-		Student student = studentDao.getStudentByEmail(email);
+	public ModelAndView getStudentResultByEmail(@RequestParam("email") String email) {
 		ModelAndView modelAndView = new ModelAndView();
-
-		if (student == null) {
+		List<Result> resultList = resultDao.resultList();
+		List<Result> studentResultList = new ArrayList<>();
+		
+		Student student = studentDao.getStudentByEmail(email);
+		if(student == null) {
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
-
-		System.out.println(student.getStudent_name());
-
-		Map<Student, Map<Subject, Double>> resultMap = resultService.getResultThroughMap(email);
-		System.out.println(resultMap);
-
-		Double totalMarks = 0.0;
-		for (Entry<Student, Map<Subject, Double>> entry : resultMap.entrySet()) {
-			modelAndView.addObject("student", entry.getKey());
-			modelAndView.addObject("marksMap", entry.getValue());
-			for (Entry<Subject, Double> markEntry : entry.getValue().entrySet()) {
-				totalMarks += markEntry.getValue();
+		
+		for(Result result : resultList) {
+			if(result.getStudent().getStudent_email().equals(email)) {
+				studentResultList.add(result);
 			}
 		}
-
-		Double percentage = resultService.calculatePercentage(totalMarks);
-		String grade = resultService.calculateGrade(percentage);
-		modelAndView.addObject("percentage", percentage);
-		modelAndView.addObject("grade", grade);
+		
+		if(studentResultList == null || studentResultList.isEmpty()) {
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+		
+		modelAndView.addObject("list", studentResultList);
 		modelAndView.setViewName("student-data");
-
+	
 		return modelAndView;
 	}
 

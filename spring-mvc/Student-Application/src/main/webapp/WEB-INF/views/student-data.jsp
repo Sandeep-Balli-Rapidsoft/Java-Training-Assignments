@@ -1,6 +1,6 @@
 <%@page import="com.springmvc.entities.Subject"%>
-<%@page import="java.util.Map"%>
-<%@page import="com.springmvc.entities.Student"%>
+<%@page import="java.util.List"%>
+<%@page import="com.springmvc.entities.Result"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -12,38 +12,46 @@
 <body>
 
 	<%
-Student student = (Student) request.getAttribute("student");
-Map<Subject, Double> marksMap = (Map) request.getAttribute("marksMap");
-Double percentage = (Double) request.getAttribute("percentage");
-String grade = (String) request.getAttribute("grade");
-%>
-
-	<h1>
-		<%=student.getStudent_name()%>
-	</h1>
-
+	List<Result> resultList = (List<Result>) request.getAttribute("list");
+	if (resultList == null || resultList.isEmpty()) {
+	%>
+	<h1>No Results Found</h1>
+	<%
+	} else {
+	%>
 	<table border="1">
 		<tr>
 			<th>Subject</th>
 			<th>Marks</th>
+			<th>Status</th>
 		</tr>
 		<%
-		for (Map.Entry<Subject, Double> entry : marksMap.entrySet()) {
-			Subject subject = entry.getKey();
-			Double marks = entry.getValue();
-			
+		for (Result result : resultList) {
+			Subject subject = result.getSubject();
+			Double marks = result.getMark();
+			Boolean isRecheck = result.getIsRecheck();
+			String status = "";
+
+			if (isRecheck == null) {
+				status = "Not Available";
+			} else if (isRecheck) {
+				status = "Pending";
+			} else {
+				status = "Updated";
+			}
 		%>
 		<tr>
 			<td><%=subject.getSubject_name()%></td>
 			<td><%=marks%></td>
+			<td><%=status%></td>
 		</tr>
 		<%
 		}
 		%>
 	</table>
-	<h3>Percentage: <%= percentage %> </h3>
-	<br>
-	<h3>Grade: <%= grade %> </h3>
+	<%
+	}
+	%>
 
 </body>
 </html>
