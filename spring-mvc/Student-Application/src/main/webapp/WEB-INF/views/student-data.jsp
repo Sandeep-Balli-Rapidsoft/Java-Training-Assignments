@@ -31,6 +31,7 @@ String grade = (String) request.getAttribute("grade");
 		for (Map.Entry<Subject, Double> entry : marksMap.entrySet()) {
 			Subject subject = entry.getKey();
 			Double marks = entry.getValue();
+			
 		%>
 		<tr>
 			<td><%=subject.getSubject_name()%></td>

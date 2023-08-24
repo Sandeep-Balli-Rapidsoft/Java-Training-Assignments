@@ -1,5 +1,6 @@
 package com.springmvc.controller;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -97,17 +98,16 @@ public class ResultController {
 
 		Map<Student, Map<Subject, Double>> resultMap = resultService.getResultThroughMap(email);
 		System.out.println(resultMap);
-		
-		
+
 		Double totalMarks = 0.0;
-		for(Entry<Student, Map<Subject, Double>> entry : resultMap.entrySet()) {
+		for (Entry<Student, Map<Subject, Double>> entry : resultMap.entrySet()) {
 			modelAndView.addObject("student", entry.getKey());
 			modelAndView.addObject("marksMap", entry.getValue());
-			for(Entry<Subject, Double> markEntry : entry.getValue().entrySet()) {
+			for (Entry<Subject, Double> markEntry : entry.getValue().entrySet()) {
 				totalMarks += markEntry.getValue();
 			}
 		}
-		
+
 		Double percentage = resultService.calculatePercentage(totalMarks);
 		String grade = resultService.calculateGrade(percentage);
 		modelAndView.addObject("percentage", percentage);
@@ -116,15 +116,104 @@ public class ResultController {
 
 		return modelAndView;
 	}
-	
+
 	@RequestMapping("/all-results")
 	public ModelAndView getAllResults() {
 		ModelAndView md = new ModelAndView();
-		Map<Student, Map<Subject, Double>> allData =  resultService.getAllStudentData();
+		Map<Student, Map<Subject, Double>> allData = resultService.getAllStudentData();
 		md.addObject("allData", allData);
 		md.setViewName("all-student-data");
 		return md;
+
+	}
+
+	@RequestMapping("/apply-recheck")
+	public String recheckPage() {
+		return "recheck-email";
+	}
+
+	@RequestMapping("/verify-email-recheck")
+	public ModelAndView verifyEmailForRecheck(@RequestParam("email") String email) {
+		Student student = studentDao.getStudentByEmail(email);
+		ModelAndView modelAndView = new ModelAndView();
+
+		if (student == null) {
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+
+		modelAndView.addObject("email", email);
+		modelAndView.setViewName("recheck-form");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/recheck-form-data", method = RequestMethod.POST)
+	public ModelAndView recheck(@RequestParam("email") String email,
+			@RequestParam(value = "subjects", required = false) List<String> subjects)
+			throws NumberFormatException, IOException {
+		ModelAndView modelAndView = new ModelAndView();
+
+		resultService.applyForRecheck(email, subjects);
+
+		modelAndView.setViewName("test");
+
+		return modelAndView;
+	}
+
+	@RequestMapping("/view-recheck-applications")
+	public ModelAndView getRecheckData() throws IOException {
+		ModelAndView modelAndView = new ModelAndView();
+		List<Result> recheckApplicationList = resultService.studentsAppliedForRecheck();
+		modelAndView.addObject("list", recheckApplicationList);
+		modelAndView.setViewName("recheck-student-data");
+		return modelAndView;
+	}
+
+	@RequestMapping("/update-mark")
+	public String updateMark() {
+		return "update-mark-email";
+	}
+
+	@RequestMapping("/update-verify-email")
+	public ModelAndView verifyEmailForUpdate(@RequestParam("email") String email) throws IOException {
+		Student student = studentDao.getStudentByEmail(email);
+		List<Result> resultList = resultDao.resultList();
+		ModelAndView modelAndView = new ModelAndView();
+		List<Result> studentsAppliedForRecheckList = resultService.studentsAppliedForRecheck();
+
+		if (student == null) {
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+
+		Boolean flag = false;
+		for (Result result : resultList) {
+			if (result.getStudent().getStudent_email().equals(email)) {
+				flag = true;
+				break;
+			}
+		}
+
+		if (!flag) {
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+
+		modelAndView.addObject("email", email);
+		modelAndView.addObject("list", studentsAppliedForRecheckList);
+		modelAndView.setViewName("update-mark-form");
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/update-mark-process", method = RequestMethod.POST)
+	public ModelAndView updateMarkProcess(@RequestParam("subjects") List<String> subjects,
+			@RequestParam("marks") List<Double> marks, @RequestParam("email") String email) {
+		ModelAndView modelAndView = new ModelAndView();
+		resultService.updateMarkLatest(email, marks, subjects);
 		
+
+		modelAndView.setViewName("test");
+		return modelAndView;
 	}
 
 }

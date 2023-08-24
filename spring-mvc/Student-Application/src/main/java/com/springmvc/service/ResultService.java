@@ -73,14 +73,14 @@ public class ResultService {
 		Student student = studentDao.getStudentByEmail(email);
 		System.out.println(email);
 		int idx = 1;
-		for(Double mark : marksList) {
+		for (Double mark : marksList) {
 			resultDao.insert(new Result(new Student(student.getId()), new Subject(idx), mark, null));
 			idx++;
 		}
 		System.out.println("Data insertion successful");
-		
+
 	}
-	
+
 	public Map<Student, Map<Subject, Double>> getResultThroughMap(String email) {
 		Map<Student, Map<Subject, Double>> resultMap = resultDao.calculateMarksByEmail(email);
 		return resultMap;
@@ -89,13 +89,13 @@ public class ResultService {
 	public void getResultByEmail(String email) {
 		List<Result> resultList = resultDao.resultList();
 		List<Result> studentResult = new ArrayList<>();
-		
+
 		for (Result result : resultList) {
 			if (result.getStudent().getStudent_email().equals(email)) {
 				studentResult.add(result);
 			}
 		}
-		
+
 		if (studentResult.isEmpty()) {
 			System.out.println("No Data found with email, " + email);
 			return;
@@ -148,14 +148,15 @@ public class ResultService {
 
 	public Map<Student, Map<Subject, Double>> getAllStudentData() {
 		Map<Student, Map<Subject, Double>> map = resultDao.displayAllStudentResult();
-		
+
 		return map;
 	}
 
-	public void applyForRecheck(String email) throws NumberFormatException, IOException {
+	public void applyForRecheck(String email, List<String> subjects) throws NumberFormatException, IOException {
 
 		List<Result> resultList = resultDao.resultList();
 		List<Result> studentResultList = new ArrayList<>();
+		List<Subject> subjectList = subjectDao.subjectList();
 
 		for (Result result : resultList) {
 			if (result.getStudent().getStudent_email().equals(email)) {
@@ -163,72 +164,34 @@ public class ResultService {
 			}
 		}
 
+		Student student = studentResultList.get(0).getStudent();
+
 		if (studentResultList.isEmpty()) {
 			System.out.println("No results found for the specified student.");
 			return;
 		}
 
-		List<Integer> selectedOptions = new ArrayList<>();
+		for (Subject sub : subjectList) {
 
-		Integer idx = 1;
-		System.out.println("Please enter your choice,");
-		for (Result result : studentResultList) {
+			for (String subject : subjects) {
 
-			Subject subject = result.getSubject();
-			System.out.println("Enter " + idx + " , to apply rechecking for " + subject.getSubject_name());
-			idx++;
-		}
-
-		try {
-
-			String[] optionsEntered = br.readLine().split("\\s+");
-			for (String option : optionsEntered) {
-				Integer optionEnteredForSubject = Integer.parseInt(option);
-				if (optionEnteredForSubject >= 1 && optionEnteredForSubject <= studentResultList.size()) {
-					selectedOptions.add(optionEnteredForSubject);
-				} else {
-					System.out.println("Invalid option selected: " + option);
+				if (sub.getSubject_name().equals(subject)) {
+					System.out.println(sub.getSubject_name() + " " + sub.getId());
+					Result result = resultDao.getResultBySubjectAndStudentIds(sub.getId(), student.getId());
+					Double existingMark = result.getMark();
+					Result recheckResult = new Result(result.getId(), student, sub, existingMark, true);
+					resultDao.applyRecheck(recheckResult);
+					System.out.println("Applied successfully");
 				}
 			}
 
-			for (Integer optionEnteredForSubject : selectedOptions) {
-				Result selectedResult = studentResultList.get(optionEnteredForSubject - 1);
-				try {
-					if (selectedResult.getIsRecheck() == false) {
-						System.out.println("This paper has already been rechecked. Kindly choose another");
-						return;
-					}
-				} catch (NullPointerException e) {
-
-				}
-
-				try {
-					if (selectedResult.getIsRecheck() == true) {
-						System.out.println("Already applied! Recheck is pending");
-						return;
-					}
-				} catch (NullPointerException e) {
-
-				}
-
-				Student student = selectedResult.getStudent();
-				Subject subject = selectedResult.getSubject();
-				Double existingMark = selectedResult.getMark();
-				Result recheckResult = new Result(selectedResult.getId(), student, subject, existingMark, true);
-
-				resultDao.applyRecheck(recheckResult);
-				System.out.println("Recheck applied successfully for " + subject.getSubject_name());
-			}
-
-		} catch (IOException e) {
-			System.err.println("An error occurred while reading input: " + e.getMessage());
-		} catch (NumberFormatException e) {
-			System.err.println("Invalid input. Please enter valid numbers separated by spaces.");
 		}
+
 	}
 
-	public void studentsAppliedForRecheck() throws IOException {
+	public List<Result> studentsAppliedForRecheck() throws IOException {
 		List<Result> resultList = resultDao.resultList();
+		System.out.println(resultList);
 		List<Result> appliedForRecheckList = new ArrayList<>();
 		for (Result result : resultList) {
 			try {
@@ -240,25 +203,14 @@ public class ResultService {
 
 			}
 		}
+		System.out.println(appliedForRecheckList);
 		if (appliedForRecheckList.isEmpty() || appliedForRecheckList == null) {
 			System.out.println("No student have applied for recheck");
-			return;
+			return null;
 		}
-		for (Result result : appliedForRecheckList) {
-			try {
-				if (result.getIsRecheck()) {
-					System.out.println("Student Email: " + result.getStudent().getStudent_email());
-					System.out.println("Student Name: " + result.getStudent().getStudent_name());
-					System.out.println("Subject: " + result.getSubject().getSubject_name());
-					System.out.println("Mark " + result.getMark());
 
-					System.out.println("-----------------------");
-				}
-
-			} catch (NullPointerException e) {
-
-			}
-		}
+		System.out.println(appliedForRecheckList);
+		return appliedForRecheckList;
 
 	}
 
@@ -302,6 +254,32 @@ public class ResultService {
 		} catch (Exception e) {
 			System.err.println("An error occurred: " + e.getMessage());
 		}
+	}
+
+	public int updateMarkLatest(String email, List<Double> marks, List<String> subjects) {
+		List<Subject> subjectList = subjectDao.subjectList();
+		Student student = studentDao.getStudentByEmail(email);
+		System.out.println("Name: " + student.getStudent_name());
+		for (Subject subject : subjectList) {
+
+			for (int i = 0; i < subjects.size(); i++) {
+				if (subject.getSubject_name().equals(subjects.get(i))) {
+					System.out.println("Subject: " + subject.getSubject_name());
+					System.out.println("ID: " + subject.getId());
+					System.out.println("Marks" + marks.get(i));
+					Double mark = marks.get(i);
+					Integer subjectId = subject.getId();
+					Integer studentId = student.getId();
+					Result result = resultDao.getResultBySubjectAndStudentIds(subjectId, studentId);
+					Result updatedResult = result;
+					result.setMark(mark);
+					result.setIsRecheck(false);
+					resultDao.updateMark(updatedResult);
+				}
+			}
+		}
+
+		return 0;
 	}
 
 	public Double calculatePercentage(Double marksSecured) {
