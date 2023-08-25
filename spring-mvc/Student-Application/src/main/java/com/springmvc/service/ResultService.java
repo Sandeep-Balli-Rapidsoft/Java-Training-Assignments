@@ -152,23 +152,57 @@ public class ResultService {
 		return map;
 	}
 
-	public void applyForRecheck(String email, List<String> subjects) throws NumberFormatException, IOException {
+	public int applyForRecheck(String email, List<String> subjects) throws NumberFormatException, IOException {
 
 		List<Result> resultList = resultDao.resultList();
 		List<Result> studentResultList = new ArrayList<>();
 		List<Subject> subjectList = subjectDao.subjectList();
 
+		// Find the student's results
 		for (Result result : resultList) {
 			if (result.getStudent().getStudent_email().equals(email)) {
 				studentResultList.add(result);
 			}
 		}
 
-		Student student = studentResultList.get(0).getStudent();
-
+		// Check if the studentResultList is empty before accessing the first element
 		if (studentResultList.isEmpty()) {
 			System.out.println("No results found for the specified student.");
-			return;
+			return 0;
+		}
+
+		Student student = studentResultList.get(0).getStudent();
+
+		for (Result result : studentResultList) {
+			if (subjects.contains(result.getSubject().getSubject_name())) {
+				try {
+					if (result.getIsRecheck() == true) {
+						System.out.println(result.getSubject().getSubject_name());
+						System.out.println("Already applied");
+						return 0;
+					}
+				} catch (NullPointerException e) {
+					// Handle null pointer exception
+				}
+
+				try {
+					if (result.getIsRecheck() == false) {
+						System.out.println(result.getSubject().getSubject_name());
+						System.out.println("Already updated");
+						return 0;
+					}
+				} catch (NullPointerException e) {
+					// Handle null pointer exception
+				}
+
+				try {
+					if (result.getIsRecheck() == null) {
+						System.out.println(result.getSubject().getSubject_name());
+					}
+				} catch (NullPointerException e) {
+					// Handle null pointer exception
+				}
+			}
 		}
 
 		for (Subject sub : subjectList) {
@@ -184,8 +218,8 @@ public class ResultService {
 					System.out.println("Applied successfully");
 				}
 			}
-
 		}
+		return 1;
 
 	}
 

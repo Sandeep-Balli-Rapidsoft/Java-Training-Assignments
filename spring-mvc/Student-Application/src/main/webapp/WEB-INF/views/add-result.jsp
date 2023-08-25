@@ -7,12 +7,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Add Result</title>
+<!-- Add the Bootstrap CSS link -->
+<link
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+	rel="stylesheet">
 <style>
 body {
-	font-family: Arial, sans-serif;
 	background-color: #f5f5f5;
-	margin: 0;
-	padding: 0;
 }
 
 .container {
@@ -22,6 +23,7 @@ body {
 	background-color: #fff;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 	border-radius: 5px;
+	margin-top: 20px;
 }
 
 h1 {
@@ -30,9 +32,7 @@ h1 {
 }
 
 label {
-	display: block;
 	font-weight: bold;
-	margin-top: 10px;
 }
 
 input[type="text"] {
@@ -61,30 +61,48 @@ button:hover {
 </style>
 </head>
 <body>
-
 	<%
 	String email = (String) request.getAttribute("email");
 	%>
-
 	<div class="container">
 		<h1>Add Result</h1>
-		<h2>
-		<%=email %>
-		</h2>
+		<h2><%=email%></h2>
 		<form action="new-result" method="post">
-			<input type="hidden" name="email" value="<%= email %>">
-			<label for="java">Java:</label> <input type="text" id="java"
-				name="java"> <label for="javascript">JavaScript:</label> <input
-				type="text" id="javascript" name="javascript"> <label
-				for="python">Python:</label> <input type="text" id="python"
-				name="python"> <label for="c">C:</label> <input type="text"
-				id="c" name="c"> <label for="operatingsystem">Operating
-				System:</label> <input type="text" id="operatingsystem"
-				name="operatingsystem"> <label for="dbms">DBMS:</label> <input
-				type="text" id="dbms" name="dbms">
-
-			<button type="submit">Submit</button>
+			<input type="hidden" name="email" value="<%=email%>">
+			<div class="form-group">
+				<label for="java">Java:</label> <input type="text"
+					class="form-control" id="java" name="java">
+			</div>
+			<div class="form-group">
+				<label for="javascript">JavaScript:</label> <input type="text"
+					class="form-control" id="javascript" name="javascript">
+			</div>
+			<div class="form-group">
+				<label for="python">Python:</label> <input type="text"
+					class="form-control" id="python" name="python">
+			</div>
+			<div class="form-group">
+				<label for="c">C:</label> <input type="text" class="form-control"
+					id="c" name="c">
+			</div>
+			<div class="form-group">
+				<label for="operatingsystem">Operating System:</label> <input
+					type="text" class="form-control" id="operatingsystem"
+					name="operatingsystem">
+			</div>
+			<div class="form-group">
+				<label for="dbms">DBMS:</label> <input type="text"
+					class="form-control" id="dbms" name="dbms">
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
 	</div>
+
+	<!-- Add the Bootstrap JS and jQuery scripts (optional) -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+	<script
+		src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

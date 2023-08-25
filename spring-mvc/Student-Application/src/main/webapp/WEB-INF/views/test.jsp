@@ -1,12 +1,23 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Test</title>
+<meta charset="UTF-8">
+<title>Error Page</title>
+<!-- Include Bootstrap CSS -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-<h1>Test Successful.</h1>
+	<div class="container mt-5">
+		<%
+		String msg = (String) request.getAttribute("msg");
+		%>
+
+		<h1 class="text-success">
+			<%=msg%>
+		</h1>
+	</div>
 </body>
 </html>

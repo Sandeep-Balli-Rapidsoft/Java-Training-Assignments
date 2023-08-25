@@ -1,105 +1,83 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Add Result</title>
-<style>
-body {
-	font-family: Arial, sans-serif;
-	background-color: #f5f5f5;
-	margin: 0;
-	padding: 0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Recheck</title>
+    <!-- Add the Bootstrap CSS link -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        function validateForm() {
+            var checkboxes = document.getElementsByName("subjects");
+            var isChecked = false;
 
-.container {
-	max-width: 600px;
-	margin: 0 auto;
-	padding: 20px;
-	background-color: #fff;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	border-radius: 5px;
-}
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i].checked) {
+                    isChecked = true;
+                    break;
+                }
+            }
 
-h1 {
-	text-align: center;
-	margin-bottom: 20px;
-}
+            if (!isChecked) {
+                alert("Please select at least one subject.");
+                return false;
+            }
 
-form {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-}
-
-label {
-	display: block;
-	font-weight: bold;
-	margin-top: 10px;
-}
-
-.checkbox-group {
-	display: flex;
-	flex-wrap: wrap;
-}
-
-.checkbox-group label {
-	flex-basis: 33.33%;
-}
-
-input[type="checkbox"] {
-	margin-top: 5px;
-	margin-bottom: 10px;
-}
-
-button {
-	margin-top: 20px;
-	padding: 10px 20px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
-}
-
-button:hover {
-	background-color: #0056b3;
-}
-</style>
+            return true;
+        }
+    </script>
 </head>
 <body>
+    <div class="container mt-4">
+        <%
+        String email = (String) request.getAttribute("email");
+        %>
 
-	<div class="container">
-		<h1>Apply for recheck</h1>
-		<%
-		String email = (String) request.getAttribute("email");
-		%>
+        <h2>Email: <%=email%></h2>
+        <form action="recheck-form-data" method="post" onsubmit="return validateForm();">
+            <input type="hidden" name="email" value="<%=email%>">
 
-		<div class="container">
-			
-			<h2>
-				<%=email%>
-			</h2>
-			<form action="recheck-form-data" method="post">
-				<input type="hidden" name="email" value="<%=email%>">
-				<div class="checkbox-group">
-					<label for="java"><input type="checkbox" id="java"
-						name="subjects" value="Java"> Java</label> <label for="javascript"><input
-						type="checkbox" id="javascript" name="subjects" value="JavaScript">
-						JavaScript</label> <label for="python"><input type="checkbox"
-						id="python" name="subjects" value="Python"> Python</label> <label
-						for="c"><input type="checkbox" id="c" name="subjects"
-						value="C"> C</label> <label for="operatingsystem"><input
-						type="checkbox" id="operatingsystem" name="subjects"
-						value="Operating System"> Operating System</label> <label
-						for="dbms"><input type="checkbox" id="dbms"
-						name="subjects" value="DBMS"> DBMS</label>
-				</div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="java" name="subjects" value="Java">
+                <label class="form-check-label" for="java">Java</label>
+            </div>
 
-				<button type="submit">Submit</button>
-			</form>
-		</div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="javascript" name="subjects" value="JavaScript">
+                <label class="form-check-label" for="javascript">JavaScript</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="python" name="subjects" value="Python">
+                <label class="form-check-label" for="python">Python</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="c" name="subjects" value="C">
+                <label class="form-check-label" for="c">C</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="operatingsystem" name="subjects" value="Operating System">
+                <label class="form-check-label" for="operatingsystem">Operating System</label>
+            </div>
+
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="dbms" name="subjects" value="DBMS">
+                <label class="form-check-label" for="dbms">DBMS</label>
+            </div>
+
+            <!-- Add more subjects here -->
+
+            <button type="submit" class="btn btn-primary mt-2">Submit</button>
+        </form>
+    </div>
+
+    <!-- Add the Bootstrap JS and jQuery scripts (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

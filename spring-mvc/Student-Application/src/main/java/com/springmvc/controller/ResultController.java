@@ -1,11 +1,11 @@
 package com.springmvc.controller;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,11 +49,15 @@ public class ResultController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (student == null) {
+			String msg = "No student found with the mail " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
 
 		for (Result result : resultList) {
+			String msg = "Student Result is already published. You cannot update untill the student applies for recheck ";
+			modelAndView.addObject("msg", msg);
 			if (result.getStudent().getStudent_email().equals(email)) {
 				modelAndView.setViewName("error");
 				return modelAndView;
@@ -66,18 +70,23 @@ public class ResultController {
 	}
 
 	@RequestMapping(value = "/new-result", method = RequestMethod.POST)
-	public String addResult(@RequestParam("java") String java, @RequestParam("javascript") String javaScript,
+	public ModelAndView addResult(@RequestParam("java") String java, @RequestParam("javascript") String javaScript,
 			@RequestParam("python") String python, @RequestParam("c") String c,
 			@RequestParam("operatingsystem") String operatingSystem, @RequestParam("dbms") String dbms,
 			@RequestParam("email") String email) {
+		
+		ModelAndView modelAndView = new ModelAndView();
 
 		List<Double> mark = Arrays.asList(Double.parseDouble(java), Double.parseDouble(javaScript),
 				Double.parseDouble(python), Double.parseDouble(c), Double.parseDouble(operatingSystem),
 				Double.parseDouble(dbms));
 
 		resultService.addNewResult(email, mark);
-
-		return "test";
+		
+		String msg = "Result added successfully";
+		modelAndView.addObject("msg", msg);
+		modelAndView.setViewName("test");
+		return modelAndView;
 	}
 
 	@RequestMapping("/validateEmail")
@@ -85,65 +94,50 @@ public class ResultController {
 		return "verify-email-result";
 	}
 
-//	@RequestMapping("/verify-for-result")
-//	public ModelAndView getResultByEmail(@RequestParam("email") String email) {
-//		Student student = studentDao.getStudentByEmail(email);
-//		ModelAndView modelAndView = new ModelAndView();
-//
-//		if (student == null) {
-//			modelAndView.setViewName("error");
-//			return modelAndView;
-//		}
-//
-//		System.out.println(student.getStudent_name());
-//
-//		Map<Student, Map<Subject, Double>> resultMap = resultService.getResultThroughMap(email);
-//		System.out.println(resultMap);
-//
-//		Double totalMarks = 0.0;
-//		for (Entry<Student, Map<Subject, Double>> entry : resultMap.entrySet()) {
-//			modelAndView.addObject("student", entry.getKey());
-//			modelAndView.addObject("marksMap", entry.getValue());
-//			for (Entry<Subject, Double> markEntry : entry.getValue().entrySet()) {
-//				totalMarks += markEntry.getValue();
-//			}
-//		}
-//
-//		Double percentage = resultService.calculatePercentage(totalMarks);
-//		String grade = resultService.calculateGrade(percentage);
-//		modelAndView.addObject("percentage", percentage);
-//		modelAndView.addObject("grade", grade);
-//		modelAndView.setViewName("student-data");
-//
-//		return modelAndView;
-//	}
-	
 	@RequestMapping("/verify-for-result")
 	public ModelAndView getStudentResultByEmail(@RequestParam("email") String email) {
 		ModelAndView modelAndView = new ModelAndView();
 		List<Result> resultList = resultDao.resultList();
 		List<Result> studentResultList = new ArrayList<>();
-		
+
 		Student student = studentDao.getStudentByEmail(email);
-		if(student == null) {
+		if (student == null) {
+			String msg = "No student found with the mail " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
-		
-		for(Result result : resultList) {
-			if(result.getStudent().getStudent_email().equals(email)) {
+
+		for (Result result : resultList) {
+			if (result.getStudent().getStudent_email().equals(email)) {
 				studentResultList.add(result);
 			}
 		}
-		
-		if(studentResultList == null || studentResultList.isEmpty()) {
+
+		if (studentResultList == null || studentResultList.isEmpty()) {
+			String msg = "No result found for student with email, " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
-		
+
+		Double totalMarks = 0.0;
+		for (Result result : studentResultList) {
+			totalMarks += result.getMark();
+		}
+		DecimalFormat decimalFormat = new DecimalFormat("#.00");
+		Double percentage = resultService.calculatePercentage(totalMarks);
+		String grade = resultService.calculateGrade(percentage);
+
+		modelAndView.addObject("name", studentResultList.get(0).getStudent().getStudent_name());
+		modelAndView.addObject("email", studentResultList.get(0).getStudent().getStudent_email());
+		modelAndView.addObject("totalMarks", totalMarks);
+		modelAndView.addObject("percentage", decimalFormat.format(percentage));
+		modelAndView.addObject("grade", grade);
+
 		modelAndView.addObject("list", studentResultList);
 		modelAndView.setViewName("student-data");
-	
+
 		return modelAndView;
 	}
 
@@ -168,6 +162,8 @@ public class ResultController {
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (student == null) {
+			String msg = "No student found with the mail " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
@@ -183,8 +179,26 @@ public class ResultController {
 			throws NumberFormatException, IOException {
 		ModelAndView modelAndView = new ModelAndView();
 
-		resultService.applyForRecheck(email, subjects);
+		if (subjects != null && !subjects.isEmpty()) {
+			Integer result = resultService.applyForRecheck(email, subjects);
+			
+			
 
+			if (result == 0) {
+				String msg = "You can apply for recheck only once or your result have not been published yet";
+				modelAndView.addObject("msg", msg);
+				modelAndView.setViewName("error");
+				return modelAndView;
+			}
+		} else {
+			String msg = "No Subject Selected";
+			modelAndView.addObject("msg", msg);
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+
+		String msg = "Recheck request processed successfully";
+		modelAndView.addObject("msg", msg);
 		modelAndView.setViewName("test");
 
 		return modelAndView;
@@ -210,8 +224,11 @@ public class ResultController {
 		List<Result> resultList = resultDao.resultList();
 		ModelAndView modelAndView = new ModelAndView();
 		List<Result> studentsAppliedForRecheckList = resultService.studentsAppliedForRecheck();
+		List<Result> studentResultList = new ArrayList<>();
 
 		if (student == null) {
+			String msg = "No student found with the mail " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
@@ -225,12 +242,29 @@ public class ResultController {
 		}
 
 		if (!flag) {
+			String msg = "No result found for student with email, " + email;
+			modelAndView.addObject("msg", msg);
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
 
+		for (Result result : resultList) {
+			if (result.getStudent().getStudent_email().equals(email)) {
+				try {
+					if (result.getIsRecheck() == true) {
+						studentResultList.add(result);
+					}
+
+				} catch (NullPointerException e) {
+
+				}
+
+			}
+		}
+
 		modelAndView.addObject("email", email);
-		modelAndView.addObject("list", studentsAppliedForRecheckList);
+		modelAndView.addObject("list", studentResultList);
+
 		modelAndView.setViewName("update-mark-form");
 		return modelAndView;
 	}
@@ -240,8 +274,8 @@ public class ResultController {
 			@RequestParam("marks") List<Double> marks, @RequestParam("email") String email) {
 		ModelAndView modelAndView = new ModelAndView();
 		resultService.updateMarkLatest(email, marks, subjects);
-		
-
+		String msg = "Mark updated successfully for the user with email,  " + email;
+		modelAndView.addObject("msg", msg);
 		modelAndView.setViewName("test");
 		return modelAndView;
 	}
