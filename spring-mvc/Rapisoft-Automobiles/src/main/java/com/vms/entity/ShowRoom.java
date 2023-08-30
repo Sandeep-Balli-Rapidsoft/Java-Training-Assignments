@@ -56,6 +56,14 @@ public class ShowRoom {
 		this.brand = brand;
 	}
 
+	public ShowRoom(Integer id, String address, String email, Brand brand) {
+		super();
+		this.id = id;
+		this.address = address;
+		this.email = email;
+		this.brand = brand;
+	}
+
 	public ShowRoom(String address, String email, Brand brand) {
 		super();
 		this.address = address;

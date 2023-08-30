@@ -1,6 +1,9 @@
 package com.vms.entity;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 enum MyEnum {
 	CAR, BIKE, SCOOTY
@@ -31,8 +37,8 @@ public class Vehicle {
 	private String chassis_number;
 
 	private String vehicle_number;
-
-	private Date date;
+	
+	private java.util.Date date;
 
 	private Double price;
 
@@ -40,7 +46,7 @@ public class Vehicle {
 
 	@ManyToOne
 	@JoinColumn(name = "show_room_id")
-	private ShowRoom showRoom;
+	private ShowRoom showroom;
 
 	public Integer getId() {
 		return id;
@@ -82,11 +88,19 @@ public class Vehicle {
 		this.chassis_number = chassis_number;
 	}
 
-	public Date getDate() {
+	public String getVehicle_number() {
+		return vehicle_number;
+	}
+
+	public void setVehicle_number(String vehicle_number) {
+		this.vehicle_number = vehicle_number;
+	}
+
+	public java.util.Date getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(java.util.Date date) {
 		this.date = date;
 	}
 
@@ -98,22 +112,6 @@ public class Vehicle {
 		this.price = price;
 	}
 
-	public ShowRoom getShowRoom() {
-		return showRoom;
-	}
-
-	public void setShowRoom(ShowRoom showRoom) {
-		this.showRoom = showRoom;
-	}
-
-	public String getVehicle_number() {
-		return vehicle_number;
-	}
-
-	public void setVehicle_number(String vehicle_number) {
-		this.vehicle_number = vehicle_number;
-	}
-
 	public Boolean getIsAvailable() {
 		return isAvailable;
 	}
@@ -122,13 +120,16 @@ public class Vehicle {
 		this.isAvailable = isAvailable;
 	}
 
-	public Vehicle() {
-		super();
-		// TODO Auto-generated constructor stub
+	public ShowRoom getShowroom() {
+		return showroom;
+	}
+
+	public void setShowroom(ShowRoom showroom) {
+		this.showroom = showroom;
 	}
 
 	public Vehicle(String name, MyEnum vehicle_type, String engine_code, String chassis_number, String vehicle_number,
-			Date date, Double price, Boolean isAvailable, ShowRoom showRoom) {
+			java.util.Date date, Double price, Boolean isAvailable, ShowRoom showroom) {
 		super();
 		this.name = name;
 		this.vehicle_type = vehicle_type;
@@ -138,7 +139,14 @@ public class Vehicle {
 		this.date = date;
 		this.price = price;
 		this.isAvailable = isAvailable;
-		this.showRoom = showRoom;
+		this.showroom = showroom;
 	}
+
+	public Vehicle() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	
 
 }

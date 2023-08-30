@@ -1,8 +1,11 @@
 package com.vms.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,12 +24,28 @@ public class BrandController {
 	@PostMapping("/create")
 	public ResponseEntity<?> addNewBrand(@RequestBody Brand brand) {
 		try {
-			brandService.saveBrand(brand);
+			brandService.save(brand);
 			String msg = "Brand Created Successfully";
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		} catch(Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/all")
+	public ResponseEntity<?> getAll() {
+		try {
+			List<Brand> list = this.brandService.getAll();
+			if(!list.isEmpty() && list != null) {
+				return new ResponseEntity<List<Brand>>(list, HttpStatus.OK);
+			} else {
+				String msg = "No Brands Available";
+				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
+			}
+		} catch (NullPointerException e) {
+			String msg = e.getMessage();
+			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

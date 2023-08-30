@@ -13,6 +13,6 @@ public class ShowRoomService {
 	private ShowRoomDao showRoomDao;
 	
 	public void saveShowRoom(ShowRoom showRoom) {
-		this.showRoomDao.saveShowRoom(showRoom);
+		this.showRoomDao.save(showRoom);
 	}
 }

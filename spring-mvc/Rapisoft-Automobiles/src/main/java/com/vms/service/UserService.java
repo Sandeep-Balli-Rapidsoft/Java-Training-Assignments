@@ -13,6 +13,6 @@ public class UserService {
 	private UserDao userDao;
 	
 	public void saveUser(User user) {
-		this.userDao.saveUser(user);
+		this.userDao.save(user);
 	}
 }
