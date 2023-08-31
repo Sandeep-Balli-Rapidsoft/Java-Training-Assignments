@@ -1,9 +1,6 @@
 package com.vms.entity;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,142 +8,148 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+//
+//enum MyEnum { // Make it public
+//    CAR, BIKE, SCOOTY
+//}
 
-enum MyEnum {
-	CAR, BIKE, SCOOTY
-}
+import com.util.MyEnum;
 
 @Entity
 @Table(name = "vehicle_table")
 public class Vehicle {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    private String name;
 
-	private String name;
+    private MyEnum vehicle_type; // Use the same enum type as in VehicleDTO class
 
-	private MyEnum vehicle_type;
+    private String engine_code;
 
-	private String engine_code;
+    private String chassis_number;
 
-	private String chassis_number;
+    private String vehicle_number;
 
-	private String vehicle_number;
-	
-	private java.util.Date date;
+    private Date createdAt;
 
-	private Double price;
+    private Date updatedAt;
 
-	private Boolean isAvailable = true;
+    private Double price;
 
-	@ManyToOne
-	@JoinColumn(name = "show_room_id")
-	private ShowRoom showroom;
+    private Boolean isAvailable = true;
 
-	public Integer getId() {
-		return id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "show_room_id")
+    private ShowRoom showroom;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Vehicle(String name, MyEnum vehicle_type, String engine_code, String chassis_number, String vehicle_number,
+            Date createdAt, Date updatedAt, Double price, Boolean isAvailable, ShowRoom showroom) {
+        super();
+        this.name = name;
+        this.vehicle_type = vehicle_type;
+        this.engine_code = engine_code;
+        this.chassis_number = chassis_number;
+        this.vehicle_number = vehicle_number;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.price = price;
+        this.isAvailable = isAvailable;
+        this.showroom = showroom;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public MyEnum getVehicle_type() {
-		return vehicle_type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setVehicle_type(MyEnum vehicle_type) {
-		this.vehicle_type = vehicle_type;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getEngine_code() {
-		return engine_code;
-	}
+    public MyEnum getVehicle_type() {
+        return vehicle_type;
+    }
 
-	public void setEngine_code(String engine_code) {
-		this.engine_code = engine_code;
-	}
+    public void setVehicle_type(MyEnum vehicle_type) {
+        this.vehicle_type = vehicle_type;
+    }
 
-	public String getChassis_number() {
-		return chassis_number;
-	}
+    public String getEngine_code() {
+        return engine_code;
+    }
 
-	public void setChassis_number(String chassis_number) {
-		this.chassis_number = chassis_number;
-	}
+    public void setEngine_code(String engine_code) {
+        this.engine_code = engine_code;
+    }
 
-	public String getVehicle_number() {
-		return vehicle_number;
-	}
+    public String getChassis_number() {
+        return chassis_number;
+    }
 
-	public void setVehicle_number(String vehicle_number) {
-		this.vehicle_number = vehicle_number;
-	}
+    public void setChassis_number(String chassis_number) {
+        this.chassis_number = chassis_number;
+    }
 
-	public java.util.Date getDate() {
-		return date;
-	}
+    public String getVehicle_number() {
+        return vehicle_number;
+    }
 
-	public void setDate(java.util.Date date) {
-		this.date = date;
-	}
+    public void setVehicle_number(String vehicle_number) {
+        this.vehicle_number = vehicle_number;
+    }
 
-	public Double getPrice() {
-		return price;
-	}
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
-	public void setPrice(Double price) {
-		this.price = price;
-	}
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public Boolean getIsAvailable() {
-		return isAvailable;
-	}
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
 
-	public void setIsAvailable(Boolean isAvailable) {
-		this.isAvailable = isAvailable;
-	}
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-	public ShowRoom getShowroom() {
-		return showroom;
-	}
+    public Double getPrice() {
+        return price;
+    }
 
-	public void setShowroom(ShowRoom showroom) {
-		this.showroom = showroom;
-	}
+    public void setPrice(Double price) {
+        this.price = price;
+    }
 
-	public Vehicle(String name, MyEnum vehicle_type, String engine_code, String chassis_number, String vehicle_number,
-			java.util.Date date, Double price, Boolean isAvailable, ShowRoom showroom) {
-		super();
-		this.name = name;
-		this.vehicle_type = vehicle_type;
-		this.engine_code = engine_code;
-		this.chassis_number = chassis_number;
-		this.vehicle_number = vehicle_number;
-		this.date = date;
-		this.price = price;
-		this.isAvailable = isAvailable;
-		this.showroom = showroom;
-	}
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
 
-	public Vehicle() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+    public void setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
 
-	
+    public ShowRoom getShowroom() {
+        return showroom;
+    }
 
+    public void setShowroom(ShowRoom showroom) {
+        this.showroom = showroom;
+    }
+
+    public Vehicle() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
 }

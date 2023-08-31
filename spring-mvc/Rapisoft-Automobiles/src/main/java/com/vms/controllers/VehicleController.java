@@ -1,11 +1,5 @@
 package com.vms.controllers;
-
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vms.entity.ShowRoom;
 import com.vms.entity.Vehicle;
 import com.vms.service.VehicleService;
 
@@ -60,7 +53,7 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<?> getVehicleById(@PathVariable("id") Integer id) {
 		Vehicle vehicle = this.vehicleService.getVehcileById(id);
 		try {
@@ -79,9 +72,10 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/{vehicle-number}")
+	@GetMapping("/vehicle-number/{vehicle-number}")
 	public ResponseEntity<?> getVehicleByVehicleNumber(@PathVariable("vehicle-number") String vehicleNumber) {
 		Vehicle vehicle = this.vehicleService.getVehicleByVehicleNumber(vehicleNumber);
+
 		try {
 			if (vehicle != null) {
 				return new ResponseEntity<Vehicle>(vehicle, HttpStatus.OK);
@@ -89,49 +83,29 @@ public class VehicleController {
 				String msg = "No Vehicle found";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
-		} catch (NullPointerException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
+			String msg = e.getMessage();
+			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/status/{status}")
+	public ResponseEntity<?> getAvailableVehiclesByStatus(@PathVariable("status") Boolean status) {
+		List<Vehicle> list = this.vehicleService.getVehicleAccordingToAvailability(status);
+		try {
+			if (!list.isEmpty() || list == null) {
+				return new ResponseEntity<List<Vehicle>>(list, HttpStatus.OK);
+			} else {
+				String msg = "No Data found";
+				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
+			}
+		} catch(Exception e) {
 			e.printStackTrace();
 			String msg = e.getMessage();
 			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateVehicleById(@PathVariable("id") Integer id, @RequestBody Vehicle vehicle) {
-
-		Vehicle vehicleById = this.vehicleService.getVehcileById(id);
-
-		List<Vehicle> vehicleList = this.vehicleService.vehicleList();
-
-		List<Vehicle> specificVehicleBrandList = new ArrayList<>();
-
-		for (Vehicle vh : vehicleList) {
-			if (vehicleById.getShowroom().getBrand().getName().equals(vh.getShowroom().getBrand().getName())) {
-				specificVehicleBrandList.add(vh);
-			}
-		}
-
-		Integer countOfABrand = specificVehicleBrandList.size();
-
-		try {
-//			String brandName = vehicleById.getShowroom().getBrand().getName();
-//			String vehicleName = vehicleById.getName();
-//			String formattedDate = vehicleById.getFormattedDate();
-//			int year = Integer.parseInt(formattedDate.split("-")[0]);
-//
-//			Integer count = this.vehicleService.vehicleList().size() + 1;
-//			String vehicleNumber = brandName + "-" + vehicleName + "-" + year + "-" + countOfABrand;
-//			
-//			vehicleById.setPrice(vehicle.getPrice());
-//			vehicleById.setVehicle_number(vehicleNumber);
-//			this.vehicleService.updateVehicle(vehicleById);
-
-			String msg = "Success";
-			return new ResponseEntity<String>(msg, HttpStatus.OK);
-		} catch (Exception e) {
-			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
 
 }

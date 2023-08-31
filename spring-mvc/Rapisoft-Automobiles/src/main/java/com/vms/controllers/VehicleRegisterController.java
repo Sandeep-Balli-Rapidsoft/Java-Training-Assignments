@@ -12,57 +12,58 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vms.entity.ShowRoom;
-import com.vms.service.ShowRoomService;
+import com.vms.entity.Register;
+import com.vms.service.VehicleRegisterService;
 
 @RestController
-@RequestMapping("/showroom")
-public class ShowRoomController {
-
+@RequestMapping("/order")
+public class VehicleRegisterController {
+	
 	@Autowired
-	private ShowRoomService showRoomService;
-
+	private VehicleRegisterService vehicleRegisterService;
+	
 	@PostMapping("/create")
-	public ResponseEntity<?> addNewShowRoom(@RequestBody ShowRoom showRoom) {
+	public ResponseEntity<?> create(@RequestBody Register register) {
 		try {
-			this.showRoomService.saveShowRoom(showRoom);
-			String msg = "Show Room Created Successfully";
+			this.vehicleRegisterService.save(register);
+			String msg = "Registration Successful";
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		} catch (Exception e) {
+			// TODO: handle exception
 			String msg = e.getMessage();
 			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	@GetMapping("/all")
-	public ResponseEntity<?> getAll() {
-		List<ShowRoom> list = this.showRoomService.getAll();
-		try {
-			if(!list.isEmpty()) {
-				return new ResponseEntity<List<ShowRoom>>(list, HttpStatus.OK);
-			} else {
-				String msg = "No Content";
-				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
-
 		}
 	}
 	
-	@GetMapping("/location/{location}")
-	public ResponseEntity<?> getShowRoomByLocation(@PathVariable ("location") String location) {
-		List<ShowRoom> list = this.showRoomService.getShowroomByLocation(location);
-		
+	@GetMapping("/all")
+	public ResponseEntity<?> getAll() {
+		List<Register> list = this.vehicleRegisterService.getAll();
 		try {
-			if(!list.isEmpty()) {
-				return new ResponseEntity<List<ShowRoom>>(list, HttpStatus.OK);
+			if(!list.isEmpty() && list != null) {
+				return new ResponseEntity<List<Register>>(list, HttpStatus.OK);
 			} else {
 				String msg = "No Content";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
+			// TODO: handle exception
+			String msg = e.getMessage();
+			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/get/{email}")
+	public ResponseEntity<?> getPurchaseListByEmail(@PathVariable("email") String email) {
+		List<Register> list = this.vehicleRegisterService.getPurchaseHistoryByUserEmail(email);
+		try {
+			if(!list.isEmpty() && list != null) {
+				return new ResponseEntity<List<Register>>(list, HttpStatus.OK);
+			} else {
+				String msg = "No Content";
+				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
 			String msg = e.getMessage();
 			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
 		}

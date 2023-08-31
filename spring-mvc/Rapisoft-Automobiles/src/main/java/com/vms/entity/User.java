@@ -21,6 +21,9 @@ public class User {
 	@Column(name = "email")
 	private String email;
 	
+	@Column(name = "phone")
+	private String phone;
+	
 	@Column(name = "address")
 	private String address;
 
@@ -56,10 +59,19 @@ public class User {
 		this.address = address;
 	}
 
-	public User(String name, String email, String address) {
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public User(String name, String email, String address, String phone) {
 		super();
 		this.name = name;
 		this.email = email;
+		this.phone = phone;
 		this.address = address;
 	}
 

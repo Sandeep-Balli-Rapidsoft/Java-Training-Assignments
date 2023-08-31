@@ -41,7 +41,9 @@ public class ShowRoomRaoImpl implements ShowRoomDao {
 	@Override
 	public List<ShowRoom> showRoomList() {
 		// TODO Auto-generated method stub
-		return null;
+		Session currentSession = this.sessionFactory.getCurrentSession();
+		List<ShowRoom> list = currentSession.createQuery("FROM ShowRoom", ShowRoom.class).getResultList();
+		return list;
 	}
 	
 	public void saveShowRoom(ShowRoom showRoom) {

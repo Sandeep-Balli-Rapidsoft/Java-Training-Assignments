@@ -30,7 +30,7 @@ public class VehicleDaoImpl implements VehicleDao {
 	public void update(Vehicle vehicle) {
 		// TODO Auto-generated method stub
 		Session currentSession = this.sessionFactory.getCurrentSession();
-		currentSession.saveOrUpdate(vehicle);
+		currentSession.update(vehicle);
 
 	}
 

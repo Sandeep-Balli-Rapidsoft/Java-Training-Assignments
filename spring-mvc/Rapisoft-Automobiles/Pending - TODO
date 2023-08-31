@@ -1,25 +1,15 @@
-
-
--> Create Api to show the vehicle details by vehicle number(vehicle details should be there , also brand details and also show room details)
-
--> Also create api to show all the vehicle number details(i.e all vehicle with it's brand)
-
--> During the registration of vehicle keep one thing in your mind that you have to generate the vehicle number automatically and the vehicle number can't be duplicate.
-
--> vehicle number format should be DEMO-(Vehicle model name)-(current year(yyyy))-(count for the vehicle for the specific brand+1)  [i.e DEMO-Yamaha-2023-1]
-
--> Create api to show total number of vehicles assigned to user and also total number of vehicle not assigned to user.
-
--> register a vehicle for a user(during vehicle registration there should be vehicle owner data also have vehicle data).
-
--> in registration time the user only provide the customer name, address, phone, email with a vehicle number.
-
--> you have to validate the vehicle number in database that is the vehicle assigned to someone or not.
-
--> if the vehicle not assigned to anyone then you have to register the vehicle with the provided customer details or else provide a message that the vehicle is already registered for a Customer
-
--> also a customer is eligible to buy more than one vehicle with different vehicle number.
-
--> During the vehicle registration you have to store both customer data and also vehicle data and current date with time( it's depends on you that how you'll handle)
-
--> Customer mail can't be duplicate( you've to create validation for that also)
+ GET Date in Correct Format
+ 
+ DTO Conversion
+ 
+ Validation and Also for Engine Code
+ 
+ CreatedAt & UpdatedAt in All Entities
+ 
+ isActive Column in All Entities
+ 
+ Implement CASCADE at all required fields
+ 
+ Vehicle Number to be generated during purchase only
+ 
+ Enum Type Validation (Vehicle Type)
