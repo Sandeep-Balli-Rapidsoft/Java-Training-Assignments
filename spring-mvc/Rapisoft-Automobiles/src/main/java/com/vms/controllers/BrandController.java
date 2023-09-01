@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vms.dto.brand.BrandDTO;
 import com.vms.entity.Brand;
 import com.vms.service.BrandService;
 
@@ -22,30 +23,30 @@ public class BrandController {
 	private BrandService brandService;
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> addNewBrand(@RequestBody Brand brand) {
+	public ResponseEntity<?> addNewBrand(@RequestBody BrandDTO brandDto) {
 		try {
-			brandService.save(brand);
+			brandService.save(brandDto);
 			String msg = "Brand Created Successfully";
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		} catch(Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> getAll() {
 		try {
-			List<Brand> list = this.brandService.getAll();
+			List<BrandDTO> list = this.brandService.getAll();
 			if(!list.isEmpty() && list != null) {
-				return new ResponseEntity<List<Brand>>(list, HttpStatus.OK);
+				return new ResponseEntity<List<BrandDTO>>(list, HttpStatus.OK);
 			} else {
 				String msg = "No Brands Available";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
 		} catch (NullPointerException e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

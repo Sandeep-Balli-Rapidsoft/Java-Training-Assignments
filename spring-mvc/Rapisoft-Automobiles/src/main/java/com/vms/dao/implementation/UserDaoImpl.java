@@ -35,7 +35,9 @@ public class UserDaoImpl implements UserDao {
 	@Override
 	public User getUser(Integer id) {
 		// TODO Auto-generated method stub
-		return null;
+		Session currentSession = this.sessionFactory.getCurrentSession();
+		User user = currentSession.get(User.class, id);
+		return user;
 	}
 
 	@Override

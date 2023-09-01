@@ -5,11 +5,15 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.util.MyEnum;
 import com.vms.dao.VehicleDao;
+import com.vms.dto.vehicle.ConvertVehicle;
+import com.vms.dto.vehicle.VehicleDTO;
 import com.vms.entity.Vehicle;
 
 @Service
@@ -23,7 +27,10 @@ public class VehicleService {
 		return str;
 	}
 
-	public void saveVehicle(Vehicle vehicle) {
+	public void saveVehicle(VehicleDTO vehicleDto) {
+
+		Vehicle vehicle = ConvertVehicle.toVehicle(vehicleDto);
+		System.out.println(vehicle.getPrice());
 
 		List<Vehicle> list = this.vehicleDao.getAll();
 
@@ -31,6 +38,7 @@ public class VehicleService {
 		String brandName = getVehicleByBrand(vehicle);
 
 		vehicle.setCreatedAt(new Date());
+		vehicle.setUpdatedAt(new Date());
 		String year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"));
 
 		int idx = 0;
@@ -40,42 +48,114 @@ public class VehicleService {
 				idx++;
 			}
 		}
-
 		String vehicleNumber = vehicleName + "-" + brandName + "-" + year + "-" + idx;
 
-		vehicle.setVehicle_number(vehicleNumber);
+		vehicle.setVehicleNumber(vehicleNumber);
 		this.vehicleDao.save(vehicle);
 	}
 
-	public List<Vehicle> vehicleList() {
-		return this.vehicleDao.getAll();
+	public List<VehicleDTO> vehicleList() {
+		List<Vehicle> list = this.vehicleDao.getAll();
+		List<VehicleDTO> vehicleDtoList = list.stream().map(ConvertVehicle::toVehicleDTO).collect(Collectors.toList());
+		return vehicleDtoList;
 	}
 
-	public Vehicle getVehcileById(Integer id) {
-		return this.vehicleDao.getById(id);
+	public VehicleDTO getVehcileById(Integer id) {
+		Vehicle vehicle = this.vehicleDao.getById(id);
+		VehicleDTO vehicleDto = ConvertVehicle.toVehicleDTO(vehicle);
+		return vehicleDto;
 	}
 
-	public Vehicle getVehicleByVehicleNumber(String vehicleNumber) {
-		List<Vehicle> list = vehicleList();
-		for (Vehicle vehicle : list) {
-			if (vehicle.getVehicle_number().equals(vehicleNumber)) {
+	public VehicleDTO getVehicleByVehicleNumber(String vehicleNumber) {
+		List<VehicleDTO> list = vehicleList();
+		for (VehicleDTO vehicle : list) {
+			if (vehicle.getVehicleNumber().equals(vehicleNumber)) {
 				return vehicle;
 			}
 		}
 		return null;
 	}
-		
-	public List<Vehicle> getVehicleAccordingToAvailability(Boolean isAvailable) {
-		List<Vehicle> list = vehicleList();
-		List<Vehicle> vehiclesList = new ArrayList<>();
-		
-		for(Vehicle vehicle: list) {
-			if(vehicle.getIsAvailable().equals(isAvailable)) {
+
+	public List<VehicleDTO> getVehicleDataDynamically(Integer showroomId, MyEnum vehicleType, Integer brandId) {
+
+		List<VehicleDTO> vehicleList = vehicleList();
+
+		List<VehicleDTO> dynamicSearchVehicleList = new ArrayList<>();
+
+		if (showroomId != null && vehicleType != null && brandId != null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getShowroom().getId() == showroomId && vehicle.getVehicleType().equals(vehicleType)
+						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId != null && vehicleType == null && brandId == null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getShowroom().getId() == showroomId) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId == null && vehicleType != null && brandId == null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getVehicleType().equals(vehicleType)) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId == null && vehicleType == null && brandId != null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getShowroom().getBrand().getId() == brandId) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId != null && vehicleType != null && brandId == null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getShowroom().getId() == showroomId && vehicle.getVehicleType().equals(vehicleType)) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId == null && vehicleType != null && brandId != null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getVehicleType().equals(vehicleType)
+						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		}
+
+		else if (showroomId != null && vehicleType == null && brandId != null) {
+			for (VehicleDTO vehicle : vehicleList) {
+				if (vehicle.getShowroom().getId() == showroomId
+						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+		} else {
+			return vehicleList;
+		}
+
+		return dynamicSearchVehicleList;
+	}
+
+	public List<VehicleDTO> getVehicleAccordingToAvailability(Boolean isAvailable) {
+		List<VehicleDTO> list = vehicleList();
+		List<VehicleDTO> vehiclesList = new ArrayList<>();
+
+		for (VehicleDTO vehicle : list) {
+			if (vehicle.getIsAvailable().equals(isAvailable)) {
 				vehiclesList.add(vehicle);
 			}
 		}
 		return vehiclesList;
-		
 	}
 
 	public void updateVehicle(Vehicle vehicle) {
@@ -83,9 +163,10 @@ public class VehicleService {
 	}
 
 	public void updateVehicleStatus(Integer vehicleId) {
-		Vehicle vehicle = getVehcileById(vehicleId);
+		Vehicle vehicle = this.vehicleDao.getById(vehicleId);
 		if (vehicle != null) {
 			vehicle.setIsAvailable(false);
+			vehicle.setUpdatedAt(new Date());
 			this.vehicleDao.update(vehicle);
 		}
 	}

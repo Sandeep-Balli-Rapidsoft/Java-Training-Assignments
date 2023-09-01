@@ -5,28 +5,38 @@ import java.util.Date;
 import com.util.MyEnum;
 import com.vms.entity.ShowRoom;
 
-
 public class VehicleDTO {
-
 	private String name;
+	
+	private Integer id;
 
-	private MyEnum vehicle_type;
+	private MyEnum vehicleType;
 
-	private String engine_code;
+	private String engineCode;
 
-	private String chassis_number;
+	private String chassisNumber;
 
-	private String vehicle_number;
-
-	private Date createdAt;
-
-	private Date updatedAt;
+	private String vehicleNumber;
 
 	private Double price;
 
 	private Boolean isAvailable = true;
 
+	private Date createdAt;
+
+	private Date updatedAt;
+
+	private Boolean isActive = true;
+
 	private ShowRoom showroom;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -36,52 +46,36 @@ public class VehicleDTO {
 		this.name = name;
 	}
 
-	public MyEnum getVehicle_type() {
-		return vehicle_type;
+	public MyEnum getVehicleType() {
+		return vehicleType;
 	}
 
-	public void setVehicle_type(MyEnum vehicle_type) {
-		this.vehicle_type = vehicle_type;
+	public void setVehicleType(MyEnum vehicleType) {
+		this.vehicleType = vehicleType;
 	}
 
-	public String getEngine_code() {
-		return engine_code;
+	public String getEngineCode() {
+		return engineCode;
 	}
 
-	public void setEngine_code(String engine_code) {
-		this.engine_code = engine_code;
+	public void setEngineCode(String engineCode) {
+		this.engineCode = engineCode;
 	}
 
-	public String getChassis_number() {
-		return chassis_number;
+	public String getChassisNumber() {
+		return chassisNumber;
 	}
 
-	public void setChassis_number(String chassis_number) {
-		this.chassis_number = chassis_number;
+	public void setChassisNumber(String chassisNumber) {
+		this.chassisNumber = chassisNumber;
 	}
 
-	public String getVehicle_number() {
-		return vehicle_number;
+	public String getVehicleNumber() {
+		return vehicleNumber;
 	}
 
-	public void setVehicle_number(String vehicle_number) {
-		this.vehicle_number = vehicle_number;
-	}
-
-	public Date getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public Date getUpdatedAt() {
-		return updatedAt;
-	}
-
-	public void setUpdatedAt(Date updatedAt) {
-		this.updatedAt = updatedAt;
+	public void setVehicleNumber(String vehicleNumber) {
+		this.vehicleNumber = vehicleNumber;
 	}
 
 	public Double getPrice() {
@@ -100,6 +94,30 @@ public class VehicleDTO {
 		this.isAvailable = isAvailable;
 	}
 
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
 	public ShowRoom getShowroom() {
 		return showroom;
 	}
@@ -108,19 +126,20 @@ public class VehicleDTO {
 		this.showroom = showroom;
 	}
 
-	public VehicleDTO(String name, MyEnum vehicle_type, String engine_code, String chassis_number,
-			String vehicle_number, Date createdAt, Date updatedAt, Double price, Boolean isAvailable,
-			ShowRoom showroom) {
+	public VehicleDTO(Integer id, String name, MyEnum vehicleType, String engineCode, String chassisNumber, String vehicleNumber,
+			Double price, Boolean isAvailable, Date createdAt, Date updatedAt, Boolean isActive, ShowRoom showroom) {
 		super();
+		this.id = id;
 		this.name = name;
-		this.vehicle_type = vehicle_type;
-		this.engine_code = engine_code;
-		this.chassis_number = chassis_number;
-		this.vehicle_number = vehicle_number;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		this.vehicleType = vehicleType;
+		this.engineCode = engineCode;
+		this.chassisNumber = chassisNumber;
+		this.vehicleNumber = vehicleNumber;
 		this.price = price;
 		this.isAvailable = isAvailable;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+		this.isActive = isActive;
 		this.showroom = showroom;
 	}
 

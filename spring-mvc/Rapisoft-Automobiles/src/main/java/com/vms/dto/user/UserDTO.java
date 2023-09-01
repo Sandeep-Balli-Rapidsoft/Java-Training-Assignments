@@ -2,6 +2,8 @@ package com.vms.dto.user;
 
 public class UserDTO {
 	
+	private Integer id;
+	
 	private String name;
 	
 	private String email;
@@ -9,6 +11,14 @@ public class UserDTO {
 	private String phone;
 	
 	private String address;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -42,8 +52,9 @@ public class UserDTO {
 		this.address = address;
 	}
 
-	public UserDTO(String name, String email, String phone, String address) {
+	public UserDTO(Integer id, String name, String email, String phone, String address) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;

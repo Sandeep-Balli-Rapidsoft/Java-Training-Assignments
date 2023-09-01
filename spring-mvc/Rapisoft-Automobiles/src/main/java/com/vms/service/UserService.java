@@ -38,4 +38,14 @@ public class UserService {
 
 		return userDtoList;
 	}
+	
+	public UserDTO getUser(Integer id) {
+		UserDTO userDto = ConvertUser.toUserDto(this.userDao.getUser(id));
+		if(userDto != null) {
+			return userDto;
+		}
+		return null;
+	}
+	
+	
 }

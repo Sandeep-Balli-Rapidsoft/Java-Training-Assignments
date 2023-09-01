@@ -1,13 +1,5 @@
  GET Date in Correct Format
  
- DTO Conversion
- 
- Validation and Also for Engine Code
- 
- CreatedAt & UpdatedAt in All Entities
- 
- isActive Column in All Entities
- 
  Implement CASCADE at all required fields
  
  Vehicle Number to be generated during purchase only

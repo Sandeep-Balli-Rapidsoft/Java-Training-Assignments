@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vms.dto.showroom.ShowroomDTO;
 import com.vms.entity.ShowRoom;
 import com.vms.service.ShowRoomService;
 
@@ -23,48 +24,48 @@ public class ShowRoomController {
 	private ShowRoomService showRoomService;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> addNewShowRoom(@RequestBody ShowRoom showRoom) {
+	public ResponseEntity<?> addNewShowRoom(@RequestBody ShowroomDTO showroomDto) {
 		try {
-			this.showRoomService.saveShowRoom(showRoom);
+			this.showRoomService.saveShowRoom(showroomDto);
 			String msg = "Show Room Created Successfully";
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		} catch (Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 
 	@GetMapping("/all")
 	public ResponseEntity<?> getAll() {
-		List<ShowRoom> list = this.showRoomService.getAll();
+		List<ShowroomDTO> list = this.showRoomService.getAll();
 		try {
 			if(!list.isEmpty()) {
-				return new ResponseEntity<List<ShowRoom>>(list, HttpStatus.OK);
+				return new ResponseEntity<List<ShowroomDTO>>(list, HttpStatus.OK);
 			} else {
 				String msg = "No Content";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 
 		}
 	}
 	
 	@GetMapping("/location/{location}")
 	public ResponseEntity<?> getShowRoomByLocation(@PathVariable ("location") String location) {
-		List<ShowRoom> list = this.showRoomService.getShowroomByLocation(location);
+		List<ShowroomDTO> list = this.showRoomService.getShowroomByLocation(location);
 		
 		try {
 			if(!list.isEmpty()) {
-				return new ResponseEntity<List<ShowRoom>>(list, HttpStatus.OK);
+				return new ResponseEntity<List<ShowroomDTO>>(list, HttpStatus.OK);
 			} else {
 				String msg = "No Content";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
 		} catch (Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

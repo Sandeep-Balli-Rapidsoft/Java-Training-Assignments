@@ -1,42 +1,24 @@
-package com.vms.entity;
+package com.vms.dto.register;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.vms.entity.User;
+import com.vms.entity.Vehicle;
 
-@Entity
-@Table(name = "register")
-public class Register {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RegisterDTO {
+	
 	private Integer id;
 
-	@Column(name = "created_at")
 	private Date createdAt;
 
-	@Column(name = "updated_at")
 	private Date updatedAt;
 
-	@ManyToOne
-	@JoinColumn(name = "vehicle_id", nullable = false)
 	private Vehicle vehicle;
 
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	@Column(name = "vehicle_number")
 	private String vehicleNumber;
 
-	@Column(name = "is_active")
 	private Boolean isActive = true;
 
 	public Integer getId() {
@@ -95,9 +77,10 @@ public class Register {
 		this.isActive = isActive;
 	}
 
-	public Register(Date createdAt, Date updatedAt, Vehicle vehicle, User user, String vehicleNumber,
+	public RegisterDTO(Integer id, Date createdAt, Date updatedAt, Vehicle vehicle, User user, String vehicleNumber,
 			Boolean isActive) {
 		super();
+		this.id = id;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 		this.vehicle = vehicle;
@@ -106,7 +89,7 @@ public class Register {
 		this.isActive = isActive;
 	}
 
-	public Register() {
+	public RegisterDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}

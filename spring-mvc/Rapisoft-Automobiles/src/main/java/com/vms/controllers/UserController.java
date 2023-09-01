@@ -1,8 +1,6 @@
 package com.vms.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vms.dto.user.ConvertUser;
 import com.vms.dto.user.UserDTO;
-import com.vms.entity.User;
 import com.vms.service.UserService;
 
 @RestController
@@ -33,7 +29,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -46,7 +42,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 }

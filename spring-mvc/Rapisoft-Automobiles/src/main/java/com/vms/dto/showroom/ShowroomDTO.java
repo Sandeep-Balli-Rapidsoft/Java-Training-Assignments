@@ -1,41 +1,23 @@
-package com.vms.entity;
+package com.vms.dto.showroom;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import com.vms.entity.Brand;
 
-@Entity
-@Table(name = "showroom")
-public class ShowRoom {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ShowroomDTO {
+
 	private Integer id;
-	
-	@Column(name = "address", nullable = true)
+
 	private String address;
-	
-	@Column(name = "email", nullable = true)
+
 	private String email;
-	
-	@ManyToOne
-	@JoinColumn(name = "brand_id", nullable = true)
+
 	private Brand brand;
-	
-	@Column(name = "created_at")
+
 	private Date createdAt;
-	
-	@Column(name = "updated_at")
+
 	private Date updatedAt;
-	
-	@Column(name = "is_active")
+
 	private Boolean isActive = true;
 
 	public Integer getId() {
@@ -94,8 +76,10 @@ public class ShowRoom {
 		this.isActive = isActive;
 	}
 
-	public ShowRoom(String address, String email, Brand brand, Date createdAt, Date updatedAt, Boolean isActive) {
+	public ShowroomDTO(Integer id, String address, String email, Brand brand, Date createdAt, Date updatedAt,
+			Boolean isActive) {
 		super();
+		this.id = id;
 		this.address = address;
 		this.email = email;
 		this.brand = brand;
@@ -104,9 +88,8 @@ public class ShowRoom {
 		this.isActive = isActive;
 	}
 
-	public ShowRoom() {
+	public ShowroomDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
 }

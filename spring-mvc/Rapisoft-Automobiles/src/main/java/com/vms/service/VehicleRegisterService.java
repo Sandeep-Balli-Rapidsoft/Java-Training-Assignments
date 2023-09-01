@@ -3,13 +3,17 @@ package com.vms.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vms.dao.VehicleRegisterDao;
+import com.vms.dto.register.ConvertRegister;
+import com.vms.dto.register.RegisterDTO;
+import com.vms.dto.vehicle.ConvertVehicle;
+import com.vms.dto.vehicle.VehicleDTO;
 import com.vms.entity.Register;
-import com.vms.entity.Vehicle;
 
 @Service
 public class VehicleRegisterService {
@@ -20,30 +24,32 @@ public class VehicleRegisterService {
 	@Autowired
 	private VehicleService vehicleService;
 
-	public void save(Register register) {
-		register.setCreatedAt(new Date());
-		register.setUpdatedAt(new Date());
-
+	public void save(RegisterDTO registerDto) {
+		registerDto.setCreatedAt(new Date());
+		registerDto.setUpdatedAt(new Date());
+		Register register = ConvertRegister.toRegister(registerDto);
+		
 		this.vehicleService.updateVehicleStatus(register.getVehicle().getId());
-
 		this.vehicleRegisterDao.save(register);
 	}
 
-	public Register getById(Integer id) {
+	public RegisterDTO getById(Integer id) {
 		Register register = this.vehicleRegisterDao.getById(id);
-		return register;
+		RegisterDTO registerDto = ConvertRegister.toRegisterDTO(register);
+		return registerDto;
 	}
 
-	public List<Register> getAll() {
+	public List<RegisterDTO> getAll() {
 		List<Register> list = this.vehicleRegisterDao.getAll();
-		return list;
+		List<RegisterDTO> registerDtoList = list.stream().map(ConvertRegister::toRegisterDTO).collect(Collectors.toList());
+		return registerDtoList;
 	}
 
-	public List<Register> getPurchaseHistoryByUserEmail(String email) {
-		List<Register> list = getAll();
-		List<Register> purchaseHistoryList = new ArrayList<>();
+	public List<RegisterDTO> getPurchaseHistoryByUserEmail(String email) {
+		List<RegisterDTO> list = getAll();
+		List<RegisterDTO> purchaseHistoryList = new ArrayList<>();
 
-		for (Register register : list) {
+		for (RegisterDTO register : list) {
 			if (register.getUser().getEmail().equals(email)) {
 				purchaseHistoryList.add(register);
 			}
@@ -51,7 +57,8 @@ public class VehicleRegisterService {
 		return purchaseHistoryList;
 	}
 
-	public void update(Register register) {
+	public void update(RegisterDTO registerDto) {
+		Register register = ConvertRegister.toRegister(registerDto);
 		this.vehicleRegisterDao.update(register);
 	}
 }

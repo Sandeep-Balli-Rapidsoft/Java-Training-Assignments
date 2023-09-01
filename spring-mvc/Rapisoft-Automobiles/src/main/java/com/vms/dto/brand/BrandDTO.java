@@ -1,35 +1,19 @@
-package com.vms.entity;
+package com.vms.dto.brand;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "brand")
-public class Brand {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class BrandDTO {
+	
 	private Integer id;
-
-	@Column(name = "name", nullable = false)
+	
 	private String name;
 
-	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "created_at")
 	private Date createdAt;
 
-	@Column(name = "updated_at")
 	private Date updatedAt;
 
-	@Column(name = "is_active")
 	private Boolean isActive = true;
 
 	public Integer getId() {
@@ -80,8 +64,9 @@ public class Brand {
 		this.isActive = isActive;
 	}
 
-	public Brand(String name, String email, Date createdAt, Date updatedAt, Boolean isActive) {
+	public BrandDTO(Integer id, String name, String email, Date createdAt, Date updatedAt, Boolean isActive) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.createdAt = createdAt;
@@ -89,8 +74,9 @@ public class Brand {
 		this.isActive = isActive;
 	}
 
-	public Brand() {
+	public BrandDTO() {
 		super();
 		// TODO Auto-generated constructor stub
-	}
+	}	
+	
 }

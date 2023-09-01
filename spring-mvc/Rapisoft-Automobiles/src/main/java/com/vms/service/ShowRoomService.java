@@ -1,12 +1,16 @@
 package com.vms.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vms.dao.ShowRoomDao;
+import com.vms.dto.showroom.ConvertShowroom;
+import com.vms.dto.showroom.ShowroomDTO;
 import com.vms.entity.ShowRoom;
 
 @Service
@@ -15,19 +19,23 @@ public class ShowRoomService {
 	@Autowired
 	private ShowRoomDao showRoomDao;
 
-	public void saveShowRoom(ShowRoom showRoom) {
-		this.showRoomDao.save(showRoom);
+	public void saveShowRoom(ShowroomDTO showroomDto) {
+		showroomDto.setCreatedAt(new Date());
+		showroomDto.setUpdatedAt(new Date());
+		ShowRoom showroom = ConvertShowroom.toShowRoom(showroomDto);
+		this.showRoomDao.save(showroom);
 	}
 
-	public List<ShowRoom> getAll() {
+	public List<ShowroomDTO> getAll() {
 		List<ShowRoom> list = this.showRoomDao.showRoomList();
-		return list;
+		List<ShowroomDTO> showroomDtoList = list.stream().map(ConvertShowroom::toShowroomDto).collect(Collectors.toList());
+		return showroomDtoList;
 	}
 	
-	public List<ShowRoom> getShowroomByLocation(String location) {
-		List<ShowRoom> list = getAll();
-		List<ShowRoom> listOfShowrooms = new ArrayList<>();
-		for(ShowRoom showroom : list) {
+	public List<ShowroomDTO> getShowroomByLocation(String location) {
+		List<ShowroomDTO> list = getAll();
+		List<ShowroomDTO> listOfShowrooms = new ArrayList<>();
+		for(ShowroomDTO showroom : list) {
 			if(showroom.getAddress().toLowerCase().equals(location.toLowerCase())) {
 				listOfShowrooms.add(showroom);
 			}

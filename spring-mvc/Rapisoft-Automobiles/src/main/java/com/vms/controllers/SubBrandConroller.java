@@ -29,7 +29,7 @@ public class SubBrandConroller {
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		} catch(Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class SubBrandConroller {
 			}
 		} catch(Exception e) {
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}
 	}
 }
