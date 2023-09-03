@@ -55,42 +55,42 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getVehicleById(@PathVariable("id") Integer id) {
-		VehicleDTO vehicle = this.vehicleService.getVehcileById(id);
-		try {
-			if (vehicle != null) {
-				System.out.println(vehicle.getShowroom().getBrand().getName());
-				System.out.println(vehicle.getIsAvailable());
-				return new ResponseEntity<VehicleDTO>(vehicle, HttpStatus.OK);
-			} else {
-				String msg = "No Vehicle found";
-				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
-		}
-	}
+//	@GetMapping("/id/{id}")
+//	public ResponseEntity<?> getVehicleById(@PathVariable("id") Integer id) {
+//		VehicleDTO vehicle = this.vehicleService.getVehcileById(id);
+//		try {
+//			if (vehicle != null) {
+//				System.out.println(vehicle.getShowroom().getBrand().getName());
+//				System.out.println(vehicle.getIsAvailable());
+//				return new ResponseEntity<VehicleDTO>(vehicle, HttpStatus.OK);
+//			} else {
+//				String msg = "No Vehicle found";
+//				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			String msg = e.getMessage();
+//			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
+//		}
+//	}
 
-	@GetMapping("/vehicle-number/{vehicle-number}")
-	public ResponseEntity<?> getVehicleByVehicleNumber(@PathVariable("vehicle-number") String vehicleNumber) {
-		VehicleDTO vehicle = this.vehicleService.getVehicleByVehicleNumber(vehicleNumber);
-
-		try {
-			if (vehicle != null) {
-				return new ResponseEntity<VehicleDTO>(vehicle, HttpStatus.OK);
-			} else {
-				String msg = "No Vehicle found";
-				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
-		}
-	}
+//	@GetMapping("/vehicle-number/{vehicle-number}")
+//	public ResponseEntity<?> getVehicleByVehicleNumber(@PathVariable("vehicle-number") String vehicleNumber) {
+//		VehicleDTO vehicle = this.vehicleService.getVehicleByVehicleNumber(vehicleNumber);
+//
+//		try {
+//			if (vehicle != null) {
+//				return new ResponseEntity<VehicleDTO>(vehicle, HttpStatus.OK);
+//			} else {
+//				String msg = "No Vehicle found";
+//				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			String msg = e.getMessage();
+//			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
+//		}
+//	}
 
 	@GetMapping("/status/{status}")
 	public ResponseEntity<?> getAvailableVehiclesByStatus(@PathVariable("status") Boolean status) {

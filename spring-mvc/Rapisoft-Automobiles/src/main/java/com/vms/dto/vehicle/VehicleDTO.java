@@ -16,8 +16,6 @@ public class VehicleDTO {
 
 	private String chassisNumber;
 
-	private String vehicleNumber;
-
 	private Double price;
 
 	private Boolean isAvailable = true;
@@ -70,14 +68,6 @@ public class VehicleDTO {
 		this.chassisNumber = chassisNumber;
 	}
 
-	public String getVehicleNumber() {
-		return vehicleNumber;
-	}
-
-	public void setVehicleNumber(String vehicleNumber) {
-		this.vehicleNumber = vehicleNumber;
-	}
-
 	public Double getPrice() {
 		return price;
 	}
@@ -126,7 +116,7 @@ public class VehicleDTO {
 		this.showroom = showroom;
 	}
 
-	public VehicleDTO(Integer id, String name, MyEnum vehicleType, String engineCode, String chassisNumber, String vehicleNumber,
+	public VehicleDTO(Integer id, String name, MyEnum vehicleType, String engineCode, String chassisNumber,
 			Double price, Boolean isAvailable, Date createdAt, Date updatedAt, Boolean isActive, ShowRoom showroom) {
 		super();
 		this.id = id;
@@ -134,7 +124,6 @@ public class VehicleDTO {
 		this.vehicleType = vehicleType;
 		this.engineCode = engineCode;
 		this.chassisNumber = chassisNumber;
-		this.vehicleNumber = vehicleNumber;
 		this.price = price;
 		this.isAvailable = isAvailable;
 		this.createdAt = createdAt;

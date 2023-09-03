@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.vms.dao.ShowRoomDao;
 import com.vms.dto.showroom.ConvertShowroom;
 import com.vms.dto.showroom.ShowroomDTO;
+import com.vms.entity.Brand;
 import com.vms.entity.ShowRoom;
 
 @Service
@@ -18,8 +19,30 @@ public class ShowRoomService {
 
 	@Autowired
 	private ShowRoomDao showRoomDao;
+	
+	@Autowired
+	private BrandService brandService;
 
 	public void saveShowRoom(ShowroomDTO showroomDto) {
+		Brand brand = this.brandService.getById(showroomDto.getBrand());
+		String address = showroomDto.getAddress();
+		
+		List<ShowroomDTO> showroomList = getAll();
+		List<ShowroomDTO> inSamePlace = new ArrayList<>();
+		
+		for(ShowroomDTO showroomObj : showroomList) {
+			if(showroomObj.getBrand().getName().equals(brand.getName())) {
+				if(showroomObj.getAddress().equals(address)) {
+					inSamePlace.add(showroomObj);
+				}
+			}
+		}
+		
+		int idx = inSamePlace.size();
+	
+		String email = address.toLowerCase() + "."+ idx + "@" + brand.getName().toLowerCase() + ".com";
+		
+		showroomDto.setEmail(email);
 		showroomDto.setCreatedAt(new Date());
 		showroomDto.setUpdatedAt(new Date());
 		ShowRoom showroom = ConvertShowroom.toShowRoom(showroomDto);

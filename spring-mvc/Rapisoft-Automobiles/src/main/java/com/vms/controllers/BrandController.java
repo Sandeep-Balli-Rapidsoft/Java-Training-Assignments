@@ -36,15 +36,18 @@ public class BrandController {
 	
 	@GetMapping("/all")
 	public ResponseEntity<?> getAll() {
+		List<BrandDTO> list = this.brandService.getAll();
 		try {
-			List<BrandDTO> list = this.brandService.getAll();
-			if(!list.isEmpty() && list != null) {
-				return new ResponseEntity<List<BrandDTO>>(list, HttpStatus.OK);
-			} else {
+			if(list.isEmpty()) {
+				// MSG is not displayed
+				
 				String msg = "No Brands Available";
 				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
 			}
-		} catch (NullPointerException e) {
+			else {
+				return new ResponseEntity<List<BrandDTO>>(list, HttpStatus.OK);
+			}
+		} catch (Exception e) {
 			String msg = e.getMessage();
 			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 		}

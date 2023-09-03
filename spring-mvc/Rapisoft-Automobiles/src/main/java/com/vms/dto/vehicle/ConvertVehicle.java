@@ -10,7 +10,6 @@ public class ConvertVehicle {
         vehicleDto.setName(vehicle.getName());
         vehicleDto.setEngineCode(vehicle.getEngineCode());
         vehicleDto.setChassisNumber(vehicle.getChassisNumber());
-        vehicleDto.setVehicleNumber(vehicle.getVehicleNumber());
         vehicleDto.setCreatedAt(vehicle.getCreatedAt());
         vehicleDto.setUpdatedAt(vehicle.getUpdatedAt());
         vehicleDto.setPrice(vehicle.getPrice());
@@ -27,7 +26,6 @@ public class ConvertVehicle {
         vehicle.setName(vehicleDto.getName());
         vehicle.setEngineCode(vehicleDto.getEngineCode());
         vehicle.setChassisNumber(vehicleDto.getChassisNumber());
-        vehicle.setVehicleNumber(vehicleDto.getVehicleNumber());
         vehicle.setCreatedAt(vehicleDto.getCreatedAt());
         vehicle.setUpdatedAt(vehicleDto.getUpdatedAt());
         vehicle.setPrice(vehicleDto.getPrice());

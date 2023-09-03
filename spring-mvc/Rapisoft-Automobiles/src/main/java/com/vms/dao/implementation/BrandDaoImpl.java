@@ -33,9 +33,11 @@ public class BrandDaoImpl implements BrandDao {
 	}
 
 	@Override
-	public Brand getById(Integer id) {
+	public Brand getById(Brand brand) {
 		// TODO Auto-generated method stub
-		return null;
+		Session currentSession = this.sessionFactory.getCurrentSession();
+		Brand brandObj = currentSession.get(Brand.class, brand.getId());
+		return brandObj;
 	}
 
 	@Override

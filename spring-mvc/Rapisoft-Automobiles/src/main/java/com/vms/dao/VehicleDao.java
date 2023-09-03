@@ -11,7 +11,7 @@ public interface VehicleDao {
 	
 	public void update(Vehicle vehicle);
 	
-	public Vehicle getById(Integer id);
+	public Vehicle getById(Vehicle vehicle);
 	
 	public List<Vehicle> getAll();
 	

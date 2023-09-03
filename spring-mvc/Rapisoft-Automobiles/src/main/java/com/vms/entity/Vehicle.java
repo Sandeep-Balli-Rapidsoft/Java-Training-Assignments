@@ -32,9 +32,6 @@ public class Vehicle {
     @Column(name = "chassis_number", nullable = false)
     private String chassisNumber;
 
-    @Column(name = "vehicle_number")
-    private String vehicleNumber;
-
     @Column(name = "price", nullable = false)
     private Double price;
 
@@ -94,14 +91,6 @@ public class Vehicle {
 		this.chassisNumber = chassisNumber;
 	}
 
-	public String getVehicleNumber() {
-		return vehicleNumber;
-	}
-
-	public void setVehicleNumber(String vehicleNumber) {
-		this.vehicleNumber = vehicleNumber;
-	}
-
 	public Double getPrice() {
 		return price;
 	}
@@ -150,14 +139,13 @@ public class Vehicle {
 		this.showroom = showroom;
 	}
 
-	public Vehicle(String name, MyEnum vehicleType, String engineCode, String chassisNumber, String vehicleNumber,
+	public Vehicle(String name, MyEnum vehicleType, String engineCode, String chassisNumber,
 			Double price, Boolean isAvailable, Date createdAt, Date updatedAt, Boolean isActive, ShowRoom showroom) {
 		super();
 		this.name = name;
 		this.vehicleType = vehicleType;
 		this.engineCode = engineCode;
 		this.chassisNumber = chassisNumber;
-		this.vehicleNumber = vehicleNumber;
 		this.price = price;
 		this.isAvailable = isAvailable;
 		this.createdAt = createdAt;

@@ -16,6 +16,7 @@ import com.vms.dto.register.RegisterDTO;
 import com.vms.dto.user.UserDTO;
 import com.vms.dto.vehicle.VehicleDTO;
 import com.vms.entity.Register;
+import com.vms.entity.Vehicle;
 import com.vms.service.UserService;
 import com.vms.service.VehicleRegisterService;
 import com.vms.service.VehicleService;
@@ -29,35 +30,18 @@ public class VehicleRegisterController {
 
 	@Autowired
 	private VehicleService vehicleService;
-	
-	@Autowired
-	private UserService userService;
 
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@RequestBody RegisterDTO registerDto) {
 		try {
 			
-			VehicleDTO vehDto = this.vehicleService.getVehcileById(registerDto.getVehicle().getId());
-			UserDTO userDto = this.userService.getUser(registerDto.getUser().getId());
-			
-//			try {
-//				if(userDto == null) {
-//					String msg = "User Not Found. Please Register the user first";
-//					return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
-//				}
-//			} catch(NullPointerException e) {
-//				String msg = "User Not Found. Please Register the user first";
-//				return new ResponseEntity<String>(msg, HttpStatus.EXPECTATION_FAILED);
-//			}
-			
-			
+			Vehicle vehDto = this.vehicleService.getVehcileById(registerDto.getVehicle());
+						
 			if (!vehDto.getIsAvailable()) {
 				String msg = "Vehicle Not Available. Already Booked";
 				return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
 			}
 			
-			
-
 			this.vehicleRegisterService.save(registerDto);
 			String msg = "Registration Successful";
 			return new ResponseEntity<String>(msg, HttpStatus.OK);

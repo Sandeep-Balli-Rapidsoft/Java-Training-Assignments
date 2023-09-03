@@ -10,7 +10,7 @@ public interface BrandDao {
 	
 	public void update(Integer id);
 	
-	public Brand getById(Integer id);
+	public Brand getById(Brand brand);
 	
 	public List<Brand> getAll();
 }

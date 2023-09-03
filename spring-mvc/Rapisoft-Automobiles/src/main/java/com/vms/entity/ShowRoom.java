@@ -19,14 +19,14 @@ public class ShowRoom {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "address", nullable = true)
+	@Column(name = "address", nullable = false)
 	private String address;
 	
-	@Column(name = "email", nullable = true)
+	@Column(name = "email")
 	private String email;
 	
 	@ManyToOne
-	@JoinColumn(name = "brand_id", nullable = true)
+	@JoinColumn(name = "brand_id", nullable = false)
 	private Brand brand;
 	
 	@Column(name = "created_at")

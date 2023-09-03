@@ -1,5 +1,6 @@
 package com.vms.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,29 +15,35 @@ import com.vms.entity.Brand;
 
 @Service
 public class BrandService {
-	
+
 	@Autowired
 	private BrandDao brandDao;
-	
+
 	public void save(BrandDTO brandDto) {
+
+		String name = brandDto.getName();
+		String email = name.toLowerCase() + "@gmail.com";
+
 		Brand brand = ConvertBrand.toBrand(brandDto);
 		brand.setCreatedAt(new Date());
 		brand.setUpdatedAt(new Date());
+		brand.setEmail(email);
 		this.brandDao.save(brand);
 	}
-	
+
 	public List<BrandDTO> getAll() {
 		List<Brand> list = this.brandDao.getAll();
 		List<BrandDTO> brandDtoList = list.stream().map(ConvertBrand::toBrandDto).collect(Collectors.toList());
-		try {
-			if(!list.isEmpty() && list != null) {
-				return brandDtoList;
-			} else {
-				return null;
-			}
-		} catch (NullPointerException e) {
-			e.getMessage();
+
+		if (!list.isEmpty()) {
+			return brandDtoList;
+		} else {
+			return new ArrayList<>();
 		}
-		return null;
 	}
+	
+	public Brand getById(Brand brand) {
+		return this.brandDao.getById(brand);
+	}
+
 }

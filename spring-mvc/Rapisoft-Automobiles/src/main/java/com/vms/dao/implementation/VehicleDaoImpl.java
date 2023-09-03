@@ -35,11 +35,11 @@ public class VehicleDaoImpl implements VehicleDao {
 	}
 
 	@Override
-	public Vehicle getById(Integer id) {
+	public Vehicle getById(Vehicle vehicle) {
 		// TODO Auto-generated method stub
 		Session currentSession = this.sessionFactory.getCurrentSession();
-		Vehicle vehicle = currentSession.get(Vehicle.class, id);
-		return vehicle;
+		Vehicle vehicleObj = currentSession.get(Vehicle.class, vehicle.getId());
+		return vehicleObj;
 	}
 
 	@Override
@@ -59,7 +59,7 @@ public class VehicleDaoImpl implements VehicleDao {
 		if(showroom != null) {
 			return showroom.getBrand().getName();
 		}
-		return null;
+		return new String();
 	}
 
 }

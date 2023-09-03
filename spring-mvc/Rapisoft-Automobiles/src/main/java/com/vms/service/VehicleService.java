@@ -39,18 +39,18 @@ public class VehicleService {
 
 		vehicle.setCreatedAt(new Date());
 		vehicle.setUpdatedAt(new Date());
-		String year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"));
-
-		int idx = 0;
-
-		for (Vehicle vh : list) {
-			if (vh.getShowroom().getBrand().getName().equals(brandName)) {
-				idx++;
-			}
-		}
-		String vehicleNumber = vehicleName + "-" + brandName + "-" + year + "-" + idx;
-
-		vehicle.setVehicleNumber(vehicleNumber);
+//		String year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"));
+//
+//		int idx = 0;
+//
+//		for (Vehicle vh : list) {
+//			if (vh.getShowroom().getBrand().getName().equals(brandName)) {
+//				idx++;
+//			}
+//		}
+//		String vehicleNumber = vehicleName + "-" + brandName + "-" + year + "-" + idx;
+//
+//		vehicle.setVehicleNumber(vehicleNumber);
 		this.vehicleDao.save(vehicle);
 	}
 
@@ -60,21 +60,20 @@ public class VehicleService {
 		return vehicleDtoList;
 	}
 
-	public VehicleDTO getVehcileById(Integer id) {
-		Vehicle vehicle = this.vehicleDao.getById(id);
-		VehicleDTO vehicleDto = ConvertVehicle.toVehicleDTO(vehicle);
-		return vehicleDto;
+	public Vehicle getVehcileById(Vehicle vehicle) {
+		return this.vehicleDao.getById(vehicle);
+		
 	}
 
-	public VehicleDTO getVehicleByVehicleNumber(String vehicleNumber) {
-		List<VehicleDTO> list = vehicleList();
-		for (VehicleDTO vehicle : list) {
-			if (vehicle.getVehicleNumber().equals(vehicleNumber)) {
-				return vehicle;
-			}
-		}
-		return null;
-	}
+//	public VehicleDTO getVehicleByVehicleNumber(String vehicleNumber) {
+//		List<VehicleDTO> list = vehicleList();
+//		for (VehicleDTO vehicle : list) {
+//			if (vehicle.getVehicleNumber().equals(vehicleNumber)) {
+//				return vehicle;
+//			}
+//		}
+//		return null;
+//	}
 
 	public List<VehicleDTO> getVehicleDataDynamically(Integer showroomId, MyEnum vehicleType, Integer brandId) {
 
@@ -162,12 +161,12 @@ public class VehicleService {
 		this.vehicleDao.update(vehicle);
 	}
 
-	public void updateVehicleStatus(Integer vehicleId) {
-		Vehicle vehicle = this.vehicleDao.getById(vehicleId);
-		if (vehicle != null) {
-			vehicle.setIsAvailable(false);
-			vehicle.setUpdatedAt(new Date());
-			this.vehicleDao.update(vehicle);
+	public void updateVehicleStatus(Vehicle vehicle) {
+		Vehicle vehicleObj = this.vehicleDao.getById(vehicle);
+		if (vehicleObj != null) {
+			vehicleObj.setIsAvailable(false);
+			vehicleObj.setUpdatedAt(new Date());
+			this.vehicleDao.update(vehicleObj);
 		}
 	}
 }
