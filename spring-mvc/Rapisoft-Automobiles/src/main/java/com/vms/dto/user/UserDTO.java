@@ -1,5 +1,7 @@
 package com.vms.dto.user;
 
+import java.util.Date;
+
 public class UserDTO {
 	
 	private Integer id;
@@ -11,6 +13,12 @@ public class UserDTO {
 	private String phone;
 	
 	private String address;
+	
+	private Date createdAt;
+	
+	private Date updatedAt;
+	
+	private Boolean isActive = true;
 
 	public Integer getId() {
 		return id;
@@ -52,13 +60,39 @@ public class UserDTO {
 		this.address = address;
 	}
 
-	public UserDTO(Integer id, String name, String email, String phone, String address) {
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Boolean getIsActive() {
+		return isActive;
+	}
+
+	public void setIsActive(Boolean isActive) {
+		this.isActive = isActive;
+	}
+
+	public UserDTO(Integer id, String name, String email, String phone, String address, Date createdAt, Date updatedAt) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.email = email;
 		this.phone = phone;
 		this.address = address;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public UserDTO() {

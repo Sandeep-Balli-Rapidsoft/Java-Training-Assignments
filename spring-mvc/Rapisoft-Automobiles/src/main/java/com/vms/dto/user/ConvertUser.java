@@ -1,27 +1,18 @@
 package com.vms.dto.user;
 
+import org.modelmapper.ModelMapper;
+
 import com.vms.entity.User;
 
 public class ConvertUser {
 	
-	public static UserDTO toUserDto(User user) {
-		UserDTO userDto = new UserDTO();
-		userDto.setId(user.getId());
-		userDto.setName(user.getName());
-		userDto.setEmail(user.getEmail());
-		userDto.setPhone(user.getPhone());
-		userDto.setAddress(user.getAddress());
-		
-		return userDto;
+	private static ModelMapper modelMapper = new ModelMapper();
+	
+	public static UserDTO toUserDto(User user) {		
+		return modelMapper.map(user, UserDTO.class);
 	}
 	
 	public static User toUser(UserDTO userDTO) {
-		User user = new User();
-		user.setId(userDTO.getId());
-		user.setName(userDTO.getName());
-		user.setEmail(userDTO.getEmail());
-		user.setPhone(userDTO.getPhone());
-		user.setAddress(userDTO.getAddress());
-		return user;
+		return modelMapper.map(userDTO, User.class);
 	}
 }

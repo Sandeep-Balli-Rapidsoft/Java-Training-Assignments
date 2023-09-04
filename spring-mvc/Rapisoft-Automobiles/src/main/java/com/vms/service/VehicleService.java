@@ -1,7 +1,5 @@
 package com.vms.service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,27 +28,9 @@ public class VehicleService {
 	public void saveVehicle(VehicleDTO vehicleDto) {
 
 		Vehicle vehicle = ConvertVehicle.toVehicle(vehicleDto);
-		System.out.println(vehicle.getPrice());
-
-		List<Vehicle> list = this.vehicleDao.getAll();
-
-		String vehicleName = vehicle.getName();
-		String brandName = getVehicleByBrand(vehicle);
 
 		vehicle.setCreatedAt(new Date());
 		vehicle.setUpdatedAt(new Date());
-//		String year = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy"));
-//
-//		int idx = 0;
-//
-//		for (Vehicle vh : list) {
-//			if (vh.getShowroom().getBrand().getName().equals(brandName)) {
-//				idx++;
-//			}
-//		}
-//		String vehicleNumber = vehicleName + "-" + brandName + "-" + year + "-" + idx;
-//
-//		vehicle.setVehicleNumber(vehicleNumber);
 		this.vehicleDao.save(vehicle);
 	}
 
@@ -62,7 +42,7 @@ public class VehicleService {
 
 	public Vehicle getVehcileById(Vehicle vehicle) {
 		return this.vehicleDao.getById(vehicle);
-		
+
 	}
 
 //	public VehicleDTO getVehicleByVehicleNumber(String vehicleNumber) {
@@ -84,7 +64,7 @@ public class VehicleService {
 		if (showroomId != null && vehicleType != null && brandId != null) {
 			for (VehicleDTO vehicle : vehicleList) {
 				if (vehicle.getShowroom().getId() == showroomId && vehicle.getVehicleType().equals(vehicleType)
-						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+						&& vehicle.getShowroom().getBrand().getId() == brandId && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -92,7 +72,7 @@ public class VehicleService {
 
 		else if (showroomId != null && vehicleType == null && brandId == null) {
 			for (VehicleDTO vehicle : vehicleList) {
-				if (vehicle.getShowroom().getId() == showroomId) {
+				if (vehicle.getShowroom().getId() == showroomId && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -100,7 +80,7 @@ public class VehicleService {
 
 		else if (showroomId == null && vehicleType != null && brandId == null) {
 			for (VehicleDTO vehicle : vehicleList) {
-				if (vehicle.getVehicleType().equals(vehicleType)) {
+				if (vehicle.getVehicleType().equals(vehicleType) && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -108,7 +88,7 @@ public class VehicleService {
 
 		else if (showroomId == null && vehicleType == null && brandId != null) {
 			for (VehicleDTO vehicle : vehicleList) {
-				if (vehicle.getShowroom().getBrand().getId() == brandId) {
+				if (vehicle.getShowroom().getBrand().getId() == brandId && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -116,7 +96,8 @@ public class VehicleService {
 
 		else if (showroomId != null && vehicleType != null && brandId == null) {
 			for (VehicleDTO vehicle : vehicleList) {
-				if (vehicle.getShowroom().getId() == showroomId && vehicle.getVehicleType().equals(vehicleType)) {
+				if (vehicle.getShowroom().getId() == showroomId && vehicle.getVehicleType().equals(vehicleType)
+						&& vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -125,7 +106,7 @@ public class VehicleService {
 		else if (showroomId == null && vehicleType != null && brandId != null) {
 			for (VehicleDTO vehicle : vehicleList) {
 				if (vehicle.getVehicleType().equals(vehicleType)
-						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+						&& vehicle.getShowroom().getBrand().getId() == brandId && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
@@ -134,15 +115,20 @@ public class VehicleService {
 		else if (showroomId != null && vehicleType == null && brandId != null) {
 			for (VehicleDTO vehicle : vehicleList) {
 				if (vehicle.getShowroom().getId() == showroomId
-						&& vehicle.getShowroom().getBrand().getId() == brandId) {
+						&& vehicle.getShowroom().getBrand().getId() == brandId && vehicle.getIsAvailable()) {
 					dynamicSearchVehicleList.add(vehicle);
 				}
 			}
 		} else {
-			return vehicleList;
+			for(VehicleDTO vehicle : vehicleList) {
+				if(vehicle.getIsAvailable()) {
+					dynamicSearchVehicleList.add(vehicle);
+				}
+			}
+			return dynamicSearchVehicleList;
 		}
 
-		return dynamicSearchVehicleList;
+		return new ArrayList<>();
 	}
 
 	public List<VehicleDTO> getVehicleAccordingToAvailability(Boolean isAvailable) {

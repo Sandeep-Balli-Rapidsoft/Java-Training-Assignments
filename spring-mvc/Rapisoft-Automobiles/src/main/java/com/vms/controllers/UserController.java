@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.util.Response;
 import com.vms.dto.user.UserDTO;
 import com.vms.service.UserService;
 
@@ -21,15 +22,13 @@ public class UserController {
 	private UserService userService;
 
 	@PostMapping("/create")
-	public ResponseEntity<?> addNewUser(@RequestBody UserDTO userDto) {
+	public Response<?> addNewUser(@RequestBody UserDTO userDto) {
 		try {
-			userService.saveUser(userDto);
-			String msg = "User Created";
-			return new ResponseEntity<String>(msg, HttpStatus.OK);
+			return userService.saveUser(userDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
+			return new Response<String>(msg, null, HttpStatus.BAD_REQUEST);
 		}
 	}
 

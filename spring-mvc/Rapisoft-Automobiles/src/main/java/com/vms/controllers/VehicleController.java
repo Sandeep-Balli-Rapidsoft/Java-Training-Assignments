@@ -38,23 +38,6 @@ public class VehicleController {
 		}
 	}
 
-	@GetMapping("/all")
-	public ResponseEntity<?> getAllVehicles() {
-		List<VehicleDTO> list = this.vehicleService.vehicleList();
-		try {
-			if (!list.isEmpty() || list == null) {
-				return new ResponseEntity<List<VehicleDTO>>(list, HttpStatus.OK);
-			} else {
-				String msg = "No Data found";
-				return new ResponseEntity<String>(msg, HttpStatus.NO_CONTENT);
-			}
-		} catch (Exception e) {
-			String msg = e.getMessage();
-			return new ResponseEntity<String>(msg, HttpStatus.BAD_REQUEST);
-
-		}
-	}
-
 //	@GetMapping("/id/{id}")
 //	public ResponseEntity<?> getVehicleById(@PathVariable("id") Integer id) {
 //		VehicleDTO vehicle = this.vehicleService.getVehcileById(id);
@@ -109,7 +92,7 @@ public class VehicleController {
 		}
 	}
 
-	@PostMapping("/location")
+	@PostMapping("/all")
 	public ResponseEntity<?> getDataDynamically(
 			@RequestParam(required = false) Integer location,
 			@RequestParam(required = false) MyEnum type, 
