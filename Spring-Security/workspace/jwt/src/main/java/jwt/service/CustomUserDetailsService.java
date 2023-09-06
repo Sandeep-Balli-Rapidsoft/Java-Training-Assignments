@@ -6,7 +6,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
@@ -14,7 +16,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 		if(username.equals("Sandeep")) {
 			return new User("Sandeep", "1234", new ArrayList<>());
 		} else {
-			throw new UsernameNotFoundException("User not found");
+			throw new UsernameNotFoundException("User not found");	
 		}
 	}
 
